@@ -7,6 +7,7 @@ import 'package:infyhms_flutter/model/doctor/bed_assign_model/bed_details_model.
 import 'package:infyhms_flutter/model/doctor/bed_assign_model/bed_update_model.dart';
 import 'package:infyhms_flutter/model/doctor/bed_assign_model/beds_model.dart';
 import 'package:infyhms_flutter/model/doctor/bed_assign_model/create_new_bed_model.dart';
+import 'package:infyhms_flutter/model/doctor/bed_assign_model/edit_bed_assign_model.dart';
 import 'package:infyhms_flutter/model/doctor/bed_assign_model/ipd_patients_model.dart';
 import 'package:infyhms_flutter/model/doctor/bed_assign_model/patient_cases_model.dart';
 import 'package:infyhms_flutter/model/doctor/bed_status_model/bed_status_details_model.dart';
@@ -444,8 +445,6 @@ abstract class ApiClient {
     @Path("caseId") String caseId,
   );
 
-  ////////
-
   @GET("doctors/bed-assign-filter?status={status}")
   Future<BedAssignFilterModel> getBedData(
     @Header('Authorization') String? token,
@@ -458,7 +457,12 @@ abstract class ApiClient {
     @Path("id") String id,
   );
 
-  //
+  @GET("doctors/bed-assign-edit/{bedAssignId}")
+  Future<EditBedAssignModel> getBedEditAssignDetails(
+    @Header('Authorization') String? token,
+    @Path("bedAssignId") int id,
+  );
+
   @GET("doctors/bed-status")
   Future<BedStatusModel> getBedStatus(
     @Header('Authorization') String? token,

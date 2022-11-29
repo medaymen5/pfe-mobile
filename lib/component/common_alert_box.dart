@@ -42,7 +42,7 @@ class ContentOfDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        height: height / 2.7,
+        height: height / 2.8,
         width: width / 1.12,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),

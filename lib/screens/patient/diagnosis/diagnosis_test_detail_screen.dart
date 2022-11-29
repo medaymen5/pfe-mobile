@@ -44,7 +44,7 @@ class DiagnosisTestDetailScreen extends StatelessWidget {
                           titleText: PreferenceUtils.getBoolValue("isDoctor") ? StringUtils.patient : StringUtils.doctor,
                           descriptionText: PreferenceUtils.getBoolValue("isDoctor")
                               ? diagnosisTestDetailsController.doctorDiagnosisTestDetailsModel!.data!.patient_name!
-                              : diagnosisTestDetailsController.diagnosisTestDetailsModel!.data!.doctor_name!,
+                              : diagnosisTestDetailsController.diagnosisTestDetailsModel!.data!.patient_name!,
                         ),
                         SizedBox(height: height * 0.015),
                         CommonDetailText(

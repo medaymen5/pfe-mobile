@@ -36,7 +36,7 @@ class BillDetailsController extends GetxController {
       progress.value = message[2];
       if (progress.value == 100) {
         if (isDownloading.value) {
-          DisplaySnackBar.displaySnackBar("Document downloaded");
+          DisplaySnackBar.displaySnackBar("Bill downloaded");
           isDownloading.value = false;
         }
       }
@@ -65,7 +65,7 @@ class BillDetailsController extends GetxController {
         );
       } catch (e) {
         isDownloading.value = false;
-        DisplaySnackBar.displaySnackBar("Document can't be downloaded");
+        DisplaySnackBar.displaySnackBar("Bill can't be downloaded");
       }
     }
   }

@@ -21,7 +21,7 @@ class EditBedScreen extends StatelessWidget {
 
     return SafeArea(
       child: GestureDetector(
-        onTap: (){
+        onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Scaffold(
@@ -38,7 +38,7 @@ class EditBedScreen extends StatelessWidget {
           ),
           body: Obx(
             () {
-              return editBedController.isCasesApiCalled.value == false
+              return editBedController.isEditBedApiCalled.value == false
                   ? const Center(child: CircularProgressIndicator())
                   : SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
@@ -47,58 +47,47 @@ class EditBedScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            /// My case
                             CommonRequiredText(width: width, text: StringUtils.myCases),
-                            const SizedBox(height: 10),
-
-                            /// My Cases
-                            CommonDropDown(
-                              enabled: false,
-                              value:
-                                  editBedController.patientCases?.data?.isEmpty ?? true ? null : editBedController.patientCases?.data?[0].patient_case,
-                              color: ColorConst.bgGreyColor,
-                              hintText: "Select case",
-                              dropdownItems: List.generate(
-                                editBedController.patientCases?.data?.length ?? 0,
-                                (index) => DropdownMenuItem(
-                                  value: editBedController.patientCases?.data?[index].patient_case,
-                                  child: Text(
-                                    editBedController.patientCases?.data?[index].patient_case ?? "",
-                                    style: const TextStyle(color: ColorConst.hintGreyColor),
-                                  ),
-                                ),
+                            SizedBox(height: height * 0.01),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: ColorConst.greyShadowColor,
+                              ),
+                              child: CommonTextField(
+                                readOnly: true,
+                                validator: (value) {
+                                  return null;
+                                },
+                                controller: editBedController.myCaseController,
+                                suffixIcon: const Icon(Icons.arrow_drop_down, color: ColorConst.blackColor),
                               ),
                             ),
                             SizedBox(height: height * 0.02),
+
+                            /// IPD patient
                             CommonRequiredText(width: width, text: StringUtils.ipdPatient),
                             SizedBox(height: height * 0.01),
-
-                            /// IPD Patient
-                            CommonDropDown(
-                              value: editBedController.ipdPatientId.toString(),
-                              enabled: editBedController.ipdPatientsModel?.data?.isNotEmpty ?? false,
-                              color: editBedController.ipdPatientsModel?.data?.isNotEmpty ?? false ? ColorConst.whiteColor : ColorConst.bgGreyColor,
-                              hintText:
-                                  editBedController.ipdPatientsModel?.data?.isNotEmpty ?? false ? "Please Select IPD Patient" : "No IPD Patient Found",
-                              onChange: editBedController.ipdPatientsModel?.data?.isNotEmpty ?? false
-                                  ? (value) {
-                                      editBedController.ipdPatientId = value;
-                                    }
-                                  : null,
-                              dropdownItems: editBedController.ipdPatientsModel?.data?.map((value) {
-                                    return DropdownMenuItem(
-                                      value: value.id.toString(),
-                                      child: Text(
-                                        value.ipd_number ?? "",
-                                      ),
-                                    );
-                                  }).toList() ??
-                                  [],
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: ColorConst.greyShadowColor,
+                              ),
+                              child: CommonTextField(
+                                readOnly: true,
+                                suffixIcon: const Icon(Icons.arrow_drop_down, color: ColorConst.blackColor),
+                                validator: (value) {
+                                  return null;
+                                },
+                                controller: editBedController.ipdPatientController,
+                              ),
                             ),
                             SizedBox(height: height * 0.02),
-                            CommonRequiredText(width: width, text: StringUtils.bedInEditBed),
-                            SizedBox(height: height * 0.01),
 
                             /// Bed
+                            CommonRequiredText(width: width, text: StringUtils.bedInEditBed),
+                            SizedBox(height: height * 0.01),
                             CommonDropDown(
                               value: editBedController.bedId,
                               onChange: (value) {
@@ -115,6 +104,8 @@ class EditBedScreen extends StatelessWidget {
                                   [],
                             ),
                             SizedBox(height: height * 0.02),
+
+                            /// Assign bed
                             CommonRequiredText(width: width, text: StringUtils.assignDate),
                             SizedBox(height: height * 0.01),
                             CommonTextField(
@@ -133,6 +124,8 @@ class EditBedScreen extends StatelessWidget {
                               ),
                             ),
                             SizedBox(height: height * 0.02),
+
+                            /// Discharge date
                             CommonRequiredText(width: width, text: StringUtils.disChargeDate),
                             SizedBox(height: height * 0.01),
                             CommonTextField(
@@ -151,6 +144,8 @@ class EditBedScreen extends StatelessWidget {
                               ),
                             ),
                             SizedBox(height: height * 0.02),
+
+                            /// note
                             CommonRequiredText(width: width, text: StringUtils.note),
                             SizedBox(height: height * 0.01),
                             CommonTextField(
@@ -162,6 +157,8 @@ class EditBedScreen extends StatelessWidget {
                               controller: editBedController.notesController,
                             ),
                             SizedBox(height: height * 0.03),
+
+                            /// save and cancel button
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

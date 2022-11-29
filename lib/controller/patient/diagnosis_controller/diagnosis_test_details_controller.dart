@@ -67,6 +67,7 @@ class DiagnosisTestDetailsController extends GetxController {
         );
       } catch (e) {
         isDownloading.value = false;
+        print(e);
         DisplaySnackBar.displaySnackBar("Diagnosis tests PDF can't be downloaded");
       }
     }

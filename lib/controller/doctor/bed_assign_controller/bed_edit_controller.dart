@@ -1,28 +1,32 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:get/get.dart';
 import 'package:infyhms_flutter/component/common_loader.dart';
 import 'package:infyhms_flutter/component/common_snackbar.dart';
 import 'package:infyhms_flutter/component/common_socket_exception.dart';
 import 'package:infyhms_flutter/model/doctor/bed_assign_model/bed_update_model.dart';
 import 'package:infyhms_flutter/model/doctor/bed_assign_model/beds_model.dart';
-import 'package:infyhms_flutter/model/doctor/bed_assign_model/ipd_patients_model.dart';
+import 'package:infyhms_flutter/model/doctor/bed_assign_model/edit_bed_assign_model.dart';
 import 'package:infyhms_flutter/model/doctor/bed_assign_model/patient_cases_model.dart';
 import 'package:infyhms_flutter/utils/preference_utils.dart';
 import 'package:infyhms_flutter/utils/string_utils.dart';
 
 class EditBedController extends GetxController {
   String? selectedDate = "";
-  String? selectedBedAssignDate = "";
-  String? selectedDischargeDate = "";
+  String? selectedBedAssignDate;
+  String? selectedDischargeDate;
 
+  final TextEditingController myCaseController = TextEditingController();
+  final TextEditingController ipdPatientController = TextEditingController();
   final TextEditingController selectedBedAssignController = TextEditingController();
   final TextEditingController selectedDischargeController = TextEditingController();
   final TextEditingController notesController = TextEditingController();
   PatientCases? patientCases;
-  IPDPatientsModel? ipdPatientsModel;
+  EditBedAssignModel? editBedAssignModel;
+
   BedsModel? bedsModel;
-  RxBool isCasesApiCalled = false.obs;
+  RxBool isEditBedApiCalled = false.obs;
 
   Map<String, dynamic> bedAssignData = Get.arguments;
 
@@ -43,20 +47,17 @@ class EditBedController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    getMyCases();
-    selectedBedAssignDate = bedAssignData["assignDate"];
-    selectedBedAssignController.text = selectedBedAssignDate ?? "";
+    getEditBedDetails();
     bedId = bedAssignData["bedId"];
     bed = bedAssignData["bed"];
     assignId = bedAssignData["assignId"];
   }
 
   Future<String?> selectDate(BuildContext context, DateTime? oldDate, bool isAssign) async {
-    DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: oldDate ?? DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
+    DateTime? picked = await DatePicker.showDateTimePicker(
+      context,
+      showTitleActions: true,
+      currentTime: oldDate ?? DateTime.now(),
     );
     if (picked != null) {
       if (isAssign) {
@@ -64,35 +65,29 @@ class EditBedController extends GetxController {
       } else {
         oldDischargeDate = picked;
       }
-      selectedDate = "${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}";
+      selectedDate =
+          "${picked.year.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.day} ${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}:${picked.second.toString().padLeft(2, '0')}";
       return selectedDate ?? "";
     } else {
       return null;
     }
   }
 
-  void getMyCases() {
-    StringUtils.client.getPatientCases(PreferenceUtils.getStringValue("token"))
+  void getEditBedDetails() {
+    StringUtils.client.getBedEditAssignDetails(PreferenceUtils.getStringValue("token"), int.parse(bedAssignData["assignId"]))
       ..then((value) {
-        patientCases = value;
-        String? caseId = value.data?.isEmpty ?? true ? null : value.data?[0].patient_case?.split(" ").first ?? "";
-        myCasesId = caseId;
-        getIPDPatients(caseId);
+        editBedAssignModel = value;
+        myCaseController.text = "${editBedAssignModel!.data!.case_id} ${editBedAssignModel!.data!.patient_name}";
+        ipdPatientController.text = "${editBedAssignModel!.data!.ipd_patient}";
+        selectedBedAssignController.text = editBedAssignModel!.data!.assign_date!;
+        selectedBedAssignDate = editBedAssignModel!.data!.assign_date!;
+        selectedDischargeController.text = editBedAssignModel!.data!.discharge_date!;
+        selectedDischargeDate = editBedAssignModel!.data!.discharge_date!;
         getBeds();
       })
       ..onError((DioError error, stackTrace) {
-        isCasesApiCalled.value = true;
-        return PatientCases();
-      });
-  }
-
-  void getIPDPatients(String? caseId) {
-    StringUtils.client.getIPDModel(PreferenceUtils.getStringValue("token"), caseId ?? "")
-      ..then((value) {
-        ipdPatientsModel = value;
-      })
-      ..onError((DioError error, stackTrace) {
-        return IPDPatientsModel();
+        CheckSocketException.checkSocketException(error);
+        return EditBedAssignModel();
       });
   }
 
@@ -100,9 +95,10 @@ class EditBedController extends GetxController {
     StringUtils.client.getBedsForEdit(PreferenceUtils.getStringValue("token"), "$bedId")
       ..then((value) {
         bedsModel = value;
-        isCasesApiCalled.value = true;
+        isEditBedApiCalled.value = true;
       })
       ..onError((DioError error, stackTrace) {
+        CheckSocketException.checkSocketException(error);
         return BedsModel();
       });
   }
@@ -126,12 +122,19 @@ class EditBedController extends GetxController {
       DisplaySnackBar.displaySnackBar("Please select discharge date");
     } else {
       CommonLoader.showLoader();
+      // print('''  ${PreferenceUtils.getStringValue("token")},
+      //  "${bedAssignData["assignId"]}",
+      //   "$bedId",
+      //   "${editBedAssignModel!.data!.ipd_patient}",
+      //   "${editBedAssignModel!.data!.case_id}",
+      //   "$selectedBedAssignDate",
+      //   "$selectedDischargeDate",     ''');
       StringUtils.client.updateBedAssign(
         PreferenceUtils.getStringValue("token"),
         "${bedAssignData["assignId"]}",
         "$bedId",
-        "$ipdPatientId",
-        "$myCasesId",
+        "${editBedAssignModel!.data!.ipd_patient}",
+        "${editBedAssignModel!.data!.case_id}",
         "$selectedBedAssignDate",
         "$selectedDischargeDate",
       )

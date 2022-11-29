@@ -79,7 +79,15 @@ class BedAssignsScreen extends StatelessWidget {
                   return bedAssignController.isBedAssignDataCalled.value == false
                       ? const Center(child: CircularProgressIndicator())
                       : bedAssignController.bedAssignFilterModel?.data?.isEmpty ?? true
-                          ? const Center(child: Text("No data found!"))
+                          ? Center(
+                              child: Text(
+                                "No data found!",
+                                style: TextStyleConst.mediumTextStyle(
+                                  ColorConst.blackColor,
+                                  width * 0.04,
+                                ),
+                              ),
+                            )
                           : ListView.builder(
                               physics: const BouncingScrollPhysics(),
                               itemCount: bedAssignController.bedAssignFilterModel?.data?.length ?? 3,
@@ -99,6 +107,7 @@ class BedAssignsScreen extends StatelessWidget {
                                                 "assignDate": "${bedAssignController.bedAssignFilterModel?.data?[index].assign_date}",
                                                 "assignId": "${bedAssignController.bedAssignFilterModel?.data?[index].id}",
                                               };
+
                                               final result = await Get.to(
                                                 () => EditBedScreen(),
                                                 arguments: data,
@@ -110,7 +119,6 @@ class BedAssignsScreen extends StatelessWidget {
                                             backgroundColor: ColorConst.orangeColor.withOpacity(0.15),
                                             label: StringUtils.edit,
                                             foregroundColor: ColorConst.orangeColor,
-                                            // lableColor: ColorConst.hintGreyColor,
                                           ),
                                         ],
                                       ),

@@ -97,7 +97,7 @@ class EditDocumentController extends GetxController {
           titleController.text.trim(),
           docTypeId ?? "",
           notesController.text.trim(),
-          file.value == null ? null : File(file.value?.path ?? ""),
+          file.value!.path == "" ? null : File(file.value?.path ?? ""),
           documentId,
         )
           ..then((value) {

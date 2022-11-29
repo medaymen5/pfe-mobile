@@ -59,12 +59,12 @@ class NewDocumentController extends GetxController {
       DisplaySnackBar.displaySnackBar("Please enter title");
     } else if (docId == null) {
       DisplaySnackBar.displaySnackBar("Please select document type");
-    } else if (file == null) {
+    } else if (file.value!.path == "") {
       DisplaySnackBar.displaySnackBar("Please attach file");
     } else if (notesController.text.trim().isEmpty) {
       DisplaySnackBar.displaySnackBar("Please enter notes");
     } else {
-      if (PreferenceUtils.getBoolValue("isLocated")) {
+      if (PreferenceUtils.getBoolValue("isDoctor")) {
         if (patientId == null) {
           DisplaySnackBar.displaySnackBar("Please select patient");
         } else {
@@ -74,7 +74,7 @@ class NewDocumentController extends GetxController {
             titleController.text.trim(),
             docId ?? "",
             patientId ?? "",
-            File(file.value?.path ?? ""),
+            file.value!.path == "" ? null : File(file.value?.path ?? ""),
           )
             ..then((value) {
               if (value.success == true) {

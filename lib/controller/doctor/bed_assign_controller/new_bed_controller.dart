@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:get/get.dart';
 import 'package:infyhms_flutter/component/common_loader.dart';
 import 'package:infyhms_flutter/component/common_snackbar.dart';
@@ -108,15 +109,15 @@ class NewBedController extends GetxController {
   }
 
   Future<String?> selectDate(BuildContext context) async {
-    DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: oldDate ?? DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
+    DateTime? picked = await DatePicker.showDateTimePicker(
+      context,
+      showTitleActions: true,
+      currentTime: oldDate ?? DateTime.now(),
     );
     if (picked != null) {
       oldDate = picked;
-      selectedDate = "${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}";
+      selectedDate =
+          "${picked.year.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.day} ${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}:${picked.second.toString().padLeft(2, '0')}";
       return selectedDate ?? "";
     } else {
       return null;
