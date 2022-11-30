@@ -332,6 +332,12 @@ abstract class ApiClient {
     @Path("id") int id,
   );
 
+  @DELETE("doctors/prescriptions/{id}")
+  Future<DeleteCommonReportModel> deletePrescriptionReport(
+    @Header('Authorization') String? token,
+    @Path("id") int id,
+  );
+
   @GET("doctors/doctor-diagnosis")
   Future<DoctorDiagnosisTestModel> getDoctorsDiagnosisTest(
     @Header('Authorization') String? token,

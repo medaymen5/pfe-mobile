@@ -4,6 +4,7 @@ import 'package:infyhms_flutter/component/common_app_bar.dart';
 import 'package:infyhms_flutter/component/common_button.dart';
 import 'package:infyhms_flutter/component/common_dropdown_button.dart';
 import 'package:infyhms_flutter/component/common_required_text.dart';
+import 'package:infyhms_flutter/component/common_text.dart';
 import 'package:infyhms_flutter/component/common_text_field.dart';
 import 'package:infyhms_flutter/constant/color_const.dart';
 import 'package:infyhms_flutter/constant/text_style_const.dart';
@@ -20,7 +21,7 @@ class NewBedScreen extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: GestureDetector(
-        onTap: (){
+        onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Scaffold(
@@ -124,7 +125,7 @@ class NewBedScreen extends StatelessWidget {
                               ),
                             ),
                             SizedBox(height: height * 0.02),
-                            CommonRequiredText(width: width, text: StringUtils.description),
+                            CommonText(width: width, text: StringUtils.description),
                             SizedBox(height: height * 0.01),
                             CommonTextField(
                               hintText: StringUtils.typeHere,

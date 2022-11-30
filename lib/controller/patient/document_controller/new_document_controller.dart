@@ -45,7 +45,6 @@ class NewDocumentController extends GetxController {
       ..then((value) {
         documentsTypeModel = value;
         gotData.value = true;
-        update();
       })
       ..onError((DioError error, stackTrace) {
         gotData.value = true;

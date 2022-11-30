@@ -109,7 +109,6 @@ class SchedulesController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-
     getSchedules();
   }
 }

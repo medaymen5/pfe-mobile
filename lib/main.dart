@@ -11,10 +11,7 @@ import 'package:infyhms_flutter/utils/preference_utils.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   PreferenceUtils.init();
-  await FlutterDownloader.initialize(
-      debug: true, // optional: set to false to disable printing logs to console (default: true)
-      ignoreSsl: true // option: set to false to disable working with http links (default: false)
-      );
+  await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -35,7 +32,10 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
-            systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light, statusBarBrightness: Brightness.dark),
+            systemOverlayStyle: SystemUiOverlayStyle(
+              statusBarIconBrightness: Brightness.light,
+              statusBarBrightness: Brightness.dark,
+            ),
             iconTheme: IconThemeData(color: Colors.black)),
       ),
       debugShowCheckedModeBanner: false,

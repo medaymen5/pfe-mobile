@@ -15,10 +15,7 @@ import 'package:infyhms_flutter/utils/preference_utils.dart';
 import 'package:infyhms_flutter/utils/string_utils.dart';
 
 class EditDocumentScreen extends StatelessWidget {
-  EditDocumentScreen({
-    Key? key,
-    required this.documentId,
-  }) : super(key: key);
+  EditDocumentScreen({Key? key, required this.documentId}) : super(key: key);
   final int documentId;
 
   final EditDocumentController editDocumentController = Get.put(EditDocumentController());

@@ -70,14 +70,14 @@ class EditDocumentController extends GetxController {
     } else {
       if (PreferenceUtils.getBoolValue("isDoctor")) {
         CommonLoader.showLoader();
-        print("$file");
+
         StringUtils.client.updateDoctorsDocuments(
           PreferenceUtils.getStringValue("token"),
           documentId.toString(),
           titleController.text.trim(),
           docTypeId ?? "",
           patientId ?? "",
-          file.value == null ? null : File(file.value?.path ?? ""),
+          file.value!.path == "" ? null : File(file.value?.path ?? ""),
         )
           ..then((value) {
             Get.back();

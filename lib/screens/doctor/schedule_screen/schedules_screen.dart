@@ -100,17 +100,31 @@ class SchedulesScreen extends StatelessWidget {
                             );
                           },
                         ),
-                        Center(
-                          child: CommonButton(
-                            textStyleConst: TextStyleConst.mediumTextStyle(ColorConst.whiteColor, width * 0.05),
-                            onTap: () {
-                              schedulesController.updateSchedules();
-                            },
-                            color: ColorConst.blueColor,
-                            text: StringUtils.save,
-                            width: width / 2.3,
-                            height: 50,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CommonButton(
+                              textStyleConst: TextStyleConst.mediumTextStyle(ColorConst.whiteColor, width * 0.05),
+                              onTap: () {
+                                schedulesController.updateSchedules();
+                              },
+                              color: ColorConst.blueColor,
+                              text: StringUtils.save,
+                              width: width / 2.3,
+                              height: 50,
+                            ),
+                            CommonButton(
+                              textStyleConst: TextStyleConst.mediumTextStyle(ColorConst.hintGreyColor, width * 0.05),
+                              onTap: () {
+                                schedulesController.gotData.value = false;
+                                schedulesController.getSchedules();
+                              },
+                              color: ColorConst.borderGreyColor,
+                              text: StringUtils.cancel,
+                              width: width / 2.3,
+                              height: 50,
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 25),
                       ],
