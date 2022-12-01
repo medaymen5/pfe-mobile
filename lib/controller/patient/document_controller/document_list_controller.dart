@@ -67,14 +67,13 @@ class DocumentController extends GetxController {
 
   void downloadDocument(context, int index) async {
     if (!isCurrentDownloading.contains(true.obs)) {
-    currentIndex = index;
-    String url;
-    if (PreferenceUtils.getBoolValue("isDoctor")) {
-      url = doctorDocumentsModel?.data?[index].document_url ?? "";
-    } else {
-      url = documentsModel?.data?[index].document_url ?? "";
-    }
-
+      currentIndex = index;
+      String url;
+      if (PreferenceUtils.getBoolValue("isDoctor")) {
+        url = doctorDocumentsModel?.data?[index].document_url ?? "";
+      } else {
+        url = documentsModel?.data?[index].document_url ?? "";
+      }
       currentIndex = index;
       if (Platform.isIOS) {
         launchUrl(Uri.parse(url));
@@ -210,6 +209,7 @@ class DocumentController extends GetxController {
     }).onError((DioError error, stackTrace) {
       documentsModel = DocumentsModel();
       gotData.value = true;
+      print(error.message);
       CheckSocketException.checkSocketException(error);
     });
   }

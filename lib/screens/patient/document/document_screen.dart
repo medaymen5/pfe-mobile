@@ -149,7 +149,11 @@ class DocumentScreen extends StatelessWidget {
                 onTap: () async {
                   final message = await Get.to(() => NewDocumentScreen(), transition: Transition.rightToLeft);
                   if (message == "Call API") {
-                    documentController.getDocuments();
+                    if (PreferenceUtils.getBoolValue("isDoctor")) {
+                      documentController.getDoctorDocuments();
+                    } else {
+                      documentController.getDocuments();
+                    }
                   }
                 },
                 child: Container(
@@ -228,57 +232,56 @@ class DocumentScreen extends StatelessWidget {
                                         backgroundColor: const Color(0xFFFCE5E5),
                                         label: StringUtils.delete,
                                         foregroundColor: ColorConst.redColor,
-                                        // lableColor: Colors.red,
                                       ),
                                     ],
                                   ),
                                   child: ListTile(
-                                      onTap: () {},
-                                      contentPadding: EdgeInsets.only(top: index == 0 ? 15 : 0, right: 15, left: 15),
-                                      title: Text(
-                                        documentController.documentsModel?.data?[index].title ?? "",
-                                        style: TextStyleConst.mediumTextStyle(
-                                          ColorConst.blackColor,
-                                          width * 0.045,
+                                    contentPadding: EdgeInsets.only(top: index == 0 ? 15 : 0, right: 15, left: 15),
+                                    title: Text(
+                                      documentController.documentsModel?.data?[index].title ?? "",
+                                      style: TextStyleConst.mediumTextStyle(
+                                        ColorConst.blackColor,
+                                        width * 0.045,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      documentController.documentsModel?.data?[index].notes ?? "",
+                                      style: TextStyleConst.mediumTextStyle(
+                                        ColorConst.hintGreyColor,
+                                        width * 0.037,
+                                      ),
+                                    ),
+                                    leading: Container(
+                                      height: 35,
+                                      width: 35,
+                                      decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                          fit: BoxFit.contain,
+                                          // image: NetworkImage(controller.documentsModel?.data?[index].document_url ?? ""),
+                                          image: AssetImage("assets/icon/imageIcon.png"),
                                         ),
                                       ),
-                                      subtitle: Text(
-                                        documentController.documentsModel?.data?[index].notes ?? "",
-                                        style: TextStyleConst.mediumTextStyle(
-                                          ColorConst.hintGreyColor,
-                                          width * 0.037,
-                                        ),
-                                      ),
-                                      leading: Container(
-                                        height: 35,
-                                        width: 35,
-                                        decoration: const BoxDecoration(
-                                          image: DecorationImage(
-                                            fit: BoxFit.contain,
-                                            // image: NetworkImage(controller.documentsModel?.data?[index].document_url ?? ""),
-                                            image: AssetImage("assets/icon/imageIcon.png"),
-                                          ),
-                                        ),
-                                      ),
-                                      trailing: Obx(
-                                        () => documentController.isCurrentDownloading[index].value
-                                            ? const CircularProgressIndicator(color: ColorConst.primaryColor)
-                                            : InkWell(
-                                                onTap: () {
-                                                  documentController.downloadDocument(context, index);
-                                                },
-                                                child: Container(
-                                                  margin: const EdgeInsets.only(right: 10),
-                                                  width: 25,
-                                                  height: 25,
-                                                  decoration: const BoxDecoration(
-                                                    image: DecorationImage(
-                                                      image: AssetImage(ImageUtils.downloadIcon),
-                                                    ),
+                                    ),
+                                    trailing: Obx(
+                                      () => documentController.isCurrentDownloading[index].value
+                                          ? const CircularProgressIndicator(color: ColorConst.primaryColor)
+                                          : InkWell(
+                                              onTap: () {
+                                                documentController.downloadDocument(context, index);
+                                              },
+                                              child: Container(
+                                                margin: const EdgeInsets.only(right: 10),
+                                                width: 25,
+                                                height: 25,
+                                                decoration: const BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: AssetImage(ImageUtils.downloadIcon),
                                                   ),
                                                 ),
                                               ),
-                                      )),
+                                            ),
+                                    ),
+                                  ),
                                 ),
                               ],
                             );
@@ -294,7 +297,11 @@ class DocumentScreen extends StatelessWidget {
                 onTap: () async {
                   final message = await Get.to(() => NewDocumentScreen(), transition: Transition.rightToLeft);
                   if (message == "Call API") {
-                    documentController.getDocuments();
+                    if (PreferenceUtils.getBoolValue("isDoctor")) {
+                      documentController.getDoctorDocuments();
+                    } else {
+                      documentController.getDocuments();
+                    }
                   }
                 },
                 child: Container(
