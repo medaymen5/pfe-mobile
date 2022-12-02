@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:infyhms_flutter/component/common_button.dart';
 import 'package:infyhms_flutter/component/common_required_text.dart';
@@ -43,62 +44,74 @@ class SchedulesScreen extends StatelessWidget {
                           hintText: "02:00:00",
                         ),
                         const SizedBox(height: 20),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: schedulesController.doctorScheduleModel?.data?.schedule?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CommonText(width: width, text: schedulesController.doctorScheduleModel?.data?.schedule?[index].available_on ?? ""),
-                                const SizedBox(height: 10),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: CommonTextField(
-                                        onTap: () {
-                                          schedulesController.showTimePickerDialog(
-                                              context, index * 2, schedulesController.controllerList[index * 2].text);
-                                        },
-                                        readOnly: true,
-                                        validator: (validator) {
-                                          return null;
-                                        },
-                                        controller: schedulesController.controllerList[index * 2],
-                                        hintText: "02:00:00",
-                                      ),
-                                    ),
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 10, right: 10),
-                                      child: Text(
-                                        "to",
-                                        style: TextStyle(
-                                          color: ColorConst.blackColor,
-                                          fontSize: 16,
+                        AnimationLimiter(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: schedulesController.doctorScheduleModel?.data?.schedule?.length ?? 0,
+                            itemBuilder: (context, index) {
+                              return AnimationConfiguration.staggeredList(
+                                position: index,
+                                duration: const Duration(milliseconds: 1000),
+                                child: SlideAnimation(
+                                  verticalOffset: 50.0,
+                                  child: FadeInAnimation(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        CommonText(
+                                            width: width, text: schedulesController.doctorScheduleModel?.data?.schedule?[index].available_on ?? ""),
+                                        const SizedBox(height: 10),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: CommonTextField(
+                                                onTap: () {
+                                                  schedulesController.showTimePickerDialog(
+                                                      context, index * 2, schedulesController.controllerList[index * 2].text);
+                                                },
+                                                readOnly: true,
+                                                validator: (validator) {
+                                                  return null;
+                                                },
+                                                controller: schedulesController.controllerList[index * 2],
+                                                hintText: "02:00:00",
+                                              ),
+                                            ),
+                                            const Padding(
+                                              padding: EdgeInsets.only(left: 10, right: 10),
+                                              child: Text(
+                                                "to",
+                                                style: TextStyle(
+                                                  color: ColorConst.blackColor,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: CommonTextField(
+                                                readOnly: true,
+                                                onTap: () {
+                                                  schedulesController.showTimePickerDialog(
+                                                      context, ((index * 2) + 1), schedulesController.controllerList[(index * 2) + 1].text);
+                                                },
+                                                validator: (validator) {
+                                                  return null;
+                                                },
+                                                controller: schedulesController.controllerList[(index * 2) + 1],
+                                                hintText: "02:00:00",
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
+                                        const SizedBox(height: 20),
+                                      ],
                                     ),
-                                    Expanded(
-                                      child: CommonTextField(
-                                        readOnly: true,
-                                        onTap: () {
-                                          schedulesController.showTimePickerDialog(
-                                              context, ((index * 2) + 1), schedulesController.controllerList[(index * 2) + 1].text);
-                                        },
-                                        validator: (validator) {
-                                          return null;
-                                        },
-                                        controller: schedulesController.controllerList[(index * 2) + 1],
-                                        hintText: "02:00:00",
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                                const SizedBox(height: 20),
-                              ],
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:infyhms_flutter/constant/color_const.dart';
 import 'package:infyhms_flutter/constant/text_style_const.dart';
@@ -82,76 +83,87 @@ class LiveConsultationsScreen extends StatelessWidget {
                               ),
                             ),
                           )
-                        : ListView.builder(
-                            itemCount: liveConsultationsController.doctorLiveConsultationsModel?.data?.length ?? 0,
-                            physics: const BouncingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                onTap: () {
-                                  Get.to(
-                                    () => LiveConsultationsDetailScreen(),
-                                    transition: Transition.rightToLeft,
-                                    arguments: liveConsultationsController.doctorLiveConsultationsModel!.data![index].id,
-                                  );
-                                },
-                                contentPadding: EdgeInsets.only(top: index == 0 ? 15 : 10, left: 15, right: 15),
-                                leading: Container(
-                                  height: 60,
-                                  width: 60,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(
-                                          liveConsultationsController.doctorLiveConsultationsModel?.data?[index].patient_image?.replaceAll(" ", "") ??
-                                              ""),
-                                    ),
-                                  ),
-                                ),
-                                trailing: GestureDetector(
-                                  onTap: () {
-                                    liveConsultationsController.getDoctorLiveMeeting(
-                                      liveConsultationsController.doctorLiveConsultationsModel!.data![index].id!,
-                                      context,
-                                      height,
-                                      width,
-                                    );
-                                  },
-                                  child: Container(
-                                    margin: const EdgeInsets.only(right: 10),
-                                    width: 30,
-                                    height: 30,
-                                    decoration: const BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(ImageUtils.videoIcon),
+                        : AnimationLimiter(
+                            child: ListView.builder(
+                              itemCount: liveConsultationsController.doctorLiveConsultationsModel?.data?.length ?? 0,
+                              physics: const BouncingScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return AnimationConfiguration.staggeredList(
+                                  position: index,
+                                  duration: const Duration(milliseconds: 1000),
+                                  child: SlideAnimation(
+                                    verticalOffset: 50.0,
+                                    child: FadeInAnimation(
+                                      child: ListTile(
+                                        onTap: () {
+                                          Get.to(
+                                            () => LiveConsultationsDetailScreen(),
+                                            transition: Transition.rightToLeft,
+                                            arguments: liveConsultationsController.doctorLiveConsultationsModel!.data![index].id,
+                                          );
+                                        },
+                                        contentPadding: EdgeInsets.only(top: index == 0 ? 15 : 10, left: 15, right: 15),
+                                        leading: Container(
+                                          height: 60,
+                                          width: 60,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(liveConsultationsController.doctorLiveConsultationsModel?.data?[index].patient_image
+                                                      ?.replaceAll(" ", "") ??
+                                                  ""),
+                                            ),
+                                          ),
+                                        ),
+                                        trailing: GestureDetector(
+                                          onTap: () {
+                                            liveConsultationsController.getDoctorLiveMeeting(
+                                              liveConsultationsController.doctorLiveConsultationsModel!.data![index].id!,
+                                              context,
+                                              height,
+                                              width,
+                                            );
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.only(right: 10),
+                                            width: 30,
+                                            height: 30,
+                                            decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                                image: AssetImage(ImageUtils.videoIcon),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        title: Text(
+                                          liveConsultationsController.doctorLiveConsultationsModel?.data?[index].consultation_title ?? "",
+                                          style: TextStyleConst.mediumTextStyle(
+                                            ColorConst.blackColor,
+                                            width * 0.045,
+                                          ),
+                                        ),
+                                        subtitle: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(height: height * 0.002),
+                                            statusText("${liveConsultationsController.doctorLiveConsultationsModel!.data![index].status}", width),
+                                            SizedBox(height: height * 0.004),
+                                            Text(
+                                              "${liveConsultationsController.doctorLiveConsultationsModel?.data?[index].consultation_time ?? ""} - ${liveConsultationsController.doctorLiveConsultationsModel?.data?[index].consultation_date ?? ""}",
+                                              style: TextStyleConst.mediumTextStyle(
+                                                ColorConst.hintGreyColor,
+                                                width * 0.036,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                title: Text(
-                                  liveConsultationsController.doctorLiveConsultationsModel?.data?[index].consultation_title ?? "",
-                                  style: TextStyleConst.mediumTextStyle(
-                                    ColorConst.blackColor,
-                                    width * 0.045,
-                                  ),
-                                ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(height: height * 0.002),
-                                    statusText("${liveConsultationsController.doctorLiveConsultationsModel!.data![index].status}", width),
-                                    SizedBox(height: height * 0.004),
-                                    Text(
-                                      "${liveConsultationsController.doctorLiveConsultationsModel?.data?[index].consultation_time ?? ""} - ${liveConsultationsController.doctorLiveConsultationsModel?.data?[index].consultation_date ?? ""}",
-                                      style: TextStyleConst.mediumTextStyle(
-                                        ColorConst.hintGreyColor,
-                                        width * 0.036,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           );
               } else {
                 return !liveConsultationsController.gotConsultationData.value
@@ -166,75 +178,87 @@ class LiveConsultationsScreen extends StatelessWidget {
                               ),
                             ),
                           )
-                        : ListView.builder(
-                            itemCount: liveConsultationsController.liveConsultationFilter?.data?.length ?? 0,
-                            physics: const BouncingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                onTap: () {
-                                  Get.to(
-                                    () => LiveConsultationsDetailScreen(),
-                                    transition: Transition.rightToLeft,
-                                    arguments: liveConsultationsController.liveConsultationFilter!.data![index].id,
-                                  );
-                                },
-                                contentPadding: EdgeInsets.only(top: index == 0 ? 15 : 10, left: 15, right: 15),
-                                leading: Container(
-                                  height: 60,
-                                  width: 60,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(
-                                          liveConsultationsController.liveConsultationFilter?.data?[index].doctor_image?.replaceAll(" ", "") ?? ""),
-                                    ),
-                                  ),
-                                ),
-                                trailing: GestureDetector(
-                                  onTap: () {
-                                    liveConsultationsController.getLiveMeeting(
-                                      liveConsultationsController.liveConsultationFilter!.data![index].id!,
-                                      context,
-                                      height,
-                                      width,
-                                    );
-                                  },
-                                  child: Container(
-                                    margin: const EdgeInsets.only(right: 10),
-                                    width: 30,
-                                    height: 30,
-                                    decoration: const BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(ImageUtils.videoIcon),
+                        : AnimationLimiter(
+                            child: ListView.builder(
+                              itemCount: liveConsultationsController.liveConsultationFilter?.data?.length ?? 0,
+                              physics: const BouncingScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return AnimationConfiguration.staggeredList(
+                                  position: index,
+                                  duration: const Duration(milliseconds: 1000),
+                                  child: SlideAnimation(
+                                    verticalOffset: 50.0,
+                                    child: FadeInAnimation(
+                                      child: ListTile(
+                                        onTap: () {
+                                          Get.to(
+                                            () => LiveConsultationsDetailScreen(),
+                                            transition: Transition.rightToLeft,
+                                            arguments: liveConsultationsController.liveConsultationFilter!.data![index].id,
+                                          );
+                                        },
+                                        contentPadding: EdgeInsets.only(top: index == 0 ? 15 : 10, left: 15, right: 15),
+                                        leading: Container(
+                                          height: 60,
+                                          width: 60,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(liveConsultationsController.liveConsultationFilter?.data?[index].doctor_image
+                                                      ?.replaceAll(" ", "") ??
+                                                  ""),
+                                            ),
+                                          ),
+                                        ),
+                                        trailing: GestureDetector(
+                                          onTap: () {
+                                            liveConsultationsController.getLiveMeeting(
+                                              liveConsultationsController.liveConsultationFilter!.data![index].id!,
+                                              context,
+                                              height,
+                                              width,
+                                            );
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.only(right: 10),
+                                            width: 30,
+                                            height: 30,
+                                            decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                                image: AssetImage(ImageUtils.videoIcon),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        title: Text(
+                                          liveConsultationsController.liveConsultationFilter?.data?[index].consultation_title ?? "",
+                                          style: TextStyleConst.mediumTextStyle(
+                                            ColorConst.blackColor,
+                                            width * 0.045,
+                                          ),
+                                        ),
+                                        subtitle: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(height: height * 0.002),
+                                            statusText(liveConsultationsController.liveConsultationFilter?.data?[index].status ?? "", width),
+                                            SizedBox(height: height * 0.004),
+                                            Text(
+                                              "${liveConsultationsController.liveConsultationFilter?.data?[index].consultation_time ?? ""} - ${liveConsultationsController.liveConsultationFilter?.data?[index].consultation_date ?? ""}",
+                                              style: TextStyleConst.mediumTextStyle(
+                                                ColorConst.hintGreyColor,
+                                                width * 0.036,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                title: Text(
-                                  liveConsultationsController.liveConsultationFilter?.data?[index].consultation_title ?? "",
-                                  style: TextStyleConst.mediumTextStyle(
-                                    ColorConst.blackColor,
-                                    width * 0.045,
-                                  ),
-                                ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(height: height * 0.002),
-                                    statusText(liveConsultationsController.liveConsultationFilter?.data?[index].status ?? "", width),
-                                    SizedBox(height: height * 0.004),
-                                    Text(
-                                      "${liveConsultationsController.liveConsultationFilter?.data?[index].consultation_time ?? ""} - ${liveConsultationsController.liveConsultationFilter?.data?[index].consultation_date ?? ""}",
-                                      style: TextStyleConst.mediumTextStyle(
-                                        ColorConst.hintGreyColor,
-                                        width * 0.036,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           );
               }
             }),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:infyhms_flutter/component/common_loader.dart';
 import 'package:infyhms_flutter/component/common_text.dart';
@@ -24,81 +25,92 @@ class BedStatusScreen extends StatelessWidget {
             ? const Center(child: CircularProgressIndicator(color: ColorConst.primaryColor))
             : bedStatusController.bedStatusModel?.data?.isEmpty ?? true
                 ? Center(child: Text("No data found!", style: TextStyleConst.mediumTextStyle(ColorConst.blackColor, 18)))
-                : ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: bedStatusController.bedStatusModel?.data?.length ?? 0,
-                    itemBuilder: (context, mainIndex) {
-                      return Column(
-                        children: [
-                          const SizedBox(height: 15),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CommonText(
-                                text: bedStatusController.bedStatusModel?.data?[mainIndex].bed_title ?? "",
-                                width: width,
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  bedStatusController.changeIcon(mainIndex);
-                                },
-                                icon: Obx(() {
-                                  return RotatedBox(
-                                    quarterTurns: bedStatusController.turns[mainIndex].value,
-                                    child: Image.asset(
-                                      ImageUtils.dropDownIcon,
-                                      width: 16,
-                                      height: 8,
-                                    ),
-                                  );
-                                }),
-                              ),
-                            ],
-                          ),
-                          Obx(() {
-                            return Visibility(
-                              visible: bedStatusController.showData[mainIndex].value,
+                : AnimationLimiter(
+                    child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: bedStatusController.bedStatusModel?.data?.length ?? 0,
+                      itemBuilder: (context, mainIndex) {
+                        return AnimationConfiguration.staggeredList(
+                          position: mainIndex,
+                          duration: const Duration(milliseconds: 1000),
+                          child: SlideAnimation(
+                            verticalOffset: 50.0,
+                            child: FadeInAnimation(
                               child: Column(
-                                children: List.generate(
-                                  bedStatusController.bedStatusModel?.data?[mainIndex].bed?.length ?? 0,
-                                  (subIndex) {
-                                    return ListTile(
-                                      onTap: () {
-                                        if (bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].status == false) {
-                                          CommonLoader.showLoader();
-                                          bedStatusController.getBedDetails(
-                                            "${bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].id}",
-                                            context,
-                                            height,
-                                            width,
-                                          );
-                                        } else {
-                                          Get.to(() => NewBedScreen());
-                                        }
-                                      },
-                                      title: Text(
-                                        bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].name ?? "",
-                                        style: TextStyleConst.mediumTextStyle(Colors.black, 18),
+                                children: [
+                                  const SizedBox(height: 15),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      CommonText(
+                                        text: bedStatusController.bedStatusModel?.data?[mainIndex].bed_title ?? "",
+                                        width: width,
                                       ),
-                                      leading: Image.asset(
-                                        bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].status ?? false
-                                            ? ImageUtils.bedStatusGreen
-                                            : ImageUtils.bedStatusRed,
-                                        height: 22,
-                                        width: 30,
+                                      IconButton(
+                                        onPressed: () {
+                                          bedStatusController.changeIcon(mainIndex);
+                                        },
+                                        icon: Obx(() {
+                                          return RotatedBox(
+                                            quarterTurns: bedStatusController.turns[mainIndex].value,
+                                            child: Image.asset(
+                                              ImageUtils.dropDownIcon,
+                                              width: 16,
+                                              height: 8,
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    ],
+                                  ),
+                                  Obx(() {
+                                    return Visibility(
+                                      visible: bedStatusController.showData[mainIndex].value,
+                                      child: Column(
+                                        children: List.generate(
+                                          bedStatusController.bedStatusModel?.data?[mainIndex].bed?.length ?? 0,
+                                          (subIndex) {
+                                            return ListTile(
+                                              onTap: () {
+                                                if (bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].status == false) {
+                                                  CommonLoader.showLoader();
+                                                  bedStatusController.getBedDetails(
+                                                    "${bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].id}",
+                                                    context,
+                                                    height,
+                                                    width,
+                                                  );
+                                                } else {
+                                                  Get.to(() => NewBedScreen());
+                                                }
+                                              },
+                                              title: Text(
+                                                bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].name ?? "",
+                                                style: TextStyleConst.mediumTextStyle(Colors.black, 18),
+                                              ),
+                                              leading: Image.asset(
+                                                bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].status ?? false
+                                                    ? ImageUtils.bedStatusGreen
+                                                    : ImageUtils.bedStatusRed,
+                                                height: 22,
+                                                width: 30,
+                                              ),
+                                            );
+                                          },
+                                        ),
                                       ),
                                     );
-                                  },
-                                ),
+                                  }),
+                                  const Divider(
+                                    color: ColorConst.borderGreyColor,
+                                  ),
+                                ],
                               ),
-                            );
-                          }),
-                          const Divider(
-                            color: ColorConst.borderGreyColor,
+                            ),
                           ),
-                        ],
-                      );
-                    },
+                        );
+                      },
+                    ),
                   );
       }),
     );

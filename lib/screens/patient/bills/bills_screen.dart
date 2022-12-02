@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:infyhms_flutter/constant/color_const.dart';
 import 'package:infyhms_flutter/constant/text_style_const.dart';
@@ -26,75 +27,86 @@ class BillScreen extends StatelessWidget {
               )
             : Container(
                 color: Colors.white,
-                child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: billsController.billsModel!.data!.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Get.to(
-                          arguments: billsController.billsModel!.data![index].id!,
-                          () => BillDetailScreen(),
-                          transition: Transition.rightToLeft,
-                        );
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(left: 15, right: 15, top: index == 0 ? 15 : 5),
-                        height: 60,
-                        color: Colors.transparent,
-                        width: double.infinity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  billsController.billsModel!.data![index].bill_id!,
-                                  style: TextStyleConst.boldTextStyle(
-                                    ColorConst.blueColor,
-                                    width * 0.045,
-                                  ),
-                                ),
-                                SizedBox(height: height * 0.002),
-                                Text(
-                                  billsController.billsModel!.data![index].bill_date!,
-                                  style: TextStyleConst.mediumTextStyle(
-                                    ColorConst.hintGreyColor,
-                                    width * 0.037,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
-                              height: 45,
-                              decoration: BoxDecoration(
-                                color: ColorConst.bgGreyColor,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Center(
+                child: AnimationLimiter(
+                  child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: billsController.billsModel!.data!.length,
+                    itemBuilder: (context, index) {
+                      return AnimationConfiguration.staggeredList(
+                        position: index,
+                        duration: const Duration(milliseconds: 1000),
+                        child: SlideAnimation(
+                          verticalOffset: 50.0,
+                          child: FadeInAnimation(
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.to(
+                                  arguments: billsController.billsModel!.data![index].id!,
+                                  () => BillDetailScreen(),
+                                  transition: Transition.rightToLeft,
+                                );
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(left: 15, right: 15, top: index == 0 ? 15 : 5),
+                                height: 60,
+                                color: Colors.transparent,
+                                width: double.infinity,
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      billsController.billsModel!.data![index].currency!,
-                                      style: TextStyleConst.boldTextStyle(ColorConst.blackColor, width * 0.04),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          billsController.billsModel!.data![index].bill_id!,
+                                          style: TextStyleConst.boldTextStyle(
+                                            ColorConst.blueColor,
+                                            width * 0.045,
+                                          ),
+                                        ),
+                                        SizedBox(height: height * 0.002),
+                                        Text(
+                                          billsController.billsModel!.data![index].bill_date!,
+                                          style: TextStyleConst.mediumTextStyle(
+                                            ColorConst.hintGreyColor,
+                                            width * 0.037,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      " ${billsController.billsModel!.data![index].amount!}",
-                                      style: TextStyleConst.boldTextStyle(ColorConst.blackColor, width * 0.04),
-                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                                      height: 45,
+                                      decoration: BoxDecoration(
+                                        color: ColorConst.bgGreyColor,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Center(
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              billsController.billsModel!.data![index].currency!,
+                                              style: TextStyleConst.boldTextStyle(ColorConst.blackColor, width * 0.04),
+                                            ),
+                                            Text(
+                                              " ${billsController.billsModel!.data![index].amount!}",
+                                              style: TextStyleConst.boldTextStyle(ColorConst.blackColor, width * 0.04),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),
-                            )
-                          ],
+                            ),
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               )
         : const Center(child: CircularProgressIndicator()));
