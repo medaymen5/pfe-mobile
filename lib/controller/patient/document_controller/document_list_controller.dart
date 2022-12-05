@@ -60,6 +60,7 @@ class DocumentController extends GetxController {
     FlutterDownloader.registerCallback(downloadingCallback);
   }
 
+  @pragma('vm:entry-point')
   static downloadingCallback(id, status, progress) {
     SendPort? sendPort = IsolateNameServer.lookupPortByName("downloading");
     sendPort?.send([id, status, progress]);
@@ -209,7 +210,6 @@ class DocumentController extends GetxController {
     }).onError((DioError error, stackTrace) {
       documentsModel = DocumentsModel();
       gotData.value = true;
-      print(error.message);
       CheckSocketException.checkSocketException(error);
     });
   }
@@ -224,7 +224,6 @@ class DocumentController extends GetxController {
         isCurrentDownloading = List.generate(value.data?.length ?? 1, (index) {
           return false.obs;
         });
-        print("----${value.data?[0].document_url}");
         gotData.value = true;
       })
       ..onError((error, stackTrace) {

@@ -122,13 +122,6 @@ class EditBedController extends GetxController {
       DisplaySnackBar.displaySnackBar("Please select discharge date");
     } else {
       CommonLoader.showLoader();
-      // print('''  ${PreferenceUtils.getStringValue("token")},
-      //  "${bedAssignData["assignId"]}",
-      //   "$bedId",
-      //   "${editBedAssignModel!.data!.ipd_patient}",
-      //   "${editBedAssignModel!.data!.case_id}",
-      //   "$selectedBedAssignDate",
-      //   "$selectedDischargeDate",     ''');
       StringUtils.client.updateBedAssign(
         PreferenceUtils.getStringValue("token"),
         "${bedAssignData["assignId"]}",

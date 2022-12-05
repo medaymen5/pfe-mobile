@@ -2130,6 +2130,7 @@ class _ApiClient implements ApiClient {
     documentTypeId,
     patientId,
     attachment,
+    notes,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -2148,6 +2149,10 @@ class _ApiClient implements ApiClient {
     _data.fields.add(MapEntry(
       'patient_id',
       patientId,
+    ));
+    _data.fields.add(MapEntry(
+      'notes',
+      notes,
     ));
     if (attachment != null) {
       _data.files.add(MapEntry(
@@ -2183,6 +2188,7 @@ class _ApiClient implements ApiClient {
     documentTypeId,
     patientId,
     attachment,
+    notes,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -2201,6 +2207,10 @@ class _ApiClient implements ApiClient {
     _data.fields.add(MapEntry(
       'patient_id',
       patientId,
+    ));
+    _data.fields.add(MapEntry(
+      'notes',
+      notes,
     ));
     if (attachment != null) {
       _data.files.add(MapEntry(

@@ -89,148 +89,153 @@ class BedAssignsScreen extends StatelessWidget {
                                 ),
                               ),
                             )
-                          : AnimationLimiter(
-                              child: ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                itemCount: bedAssignController.bedAssignFilterModel?.data?.length ?? 3,
-                                itemBuilder: (context, index) {
-                                  return AnimationConfiguration.staggeredList(
-                                    position: index,
-                                    duration: const Duration(milliseconds: 1000),
-                                    child: SlideAnimation(
-                                      verticalOffset: 50.0,
-                                      child: FadeInAnimation(
-                                        child: Column(
-                                          children: [
-                                            Slidable(
-                                              startActionPane: ActionPane(
-                                                extentRatio: 0.25,
-                                                motion: const ScrollMotion(),
-                                                children: [
-                                                  SlidableAction(
-                                                    onPressed: (context) async {
-                                                      var data = {
-                                                        "bed": "${bedAssignController.bedAssignFilterModel?.data?[index].bed}",
-                                                        "bedId": "${bedAssignController.bedAssignFilterModel?.data?[index].bed_id}",
-                                                        "assignDate": "${bedAssignController.bedAssignFilterModel?.data?[index].assign_date}",
-                                                        "assignId": "${bedAssignController.bedAssignFilterModel?.data?[index].id}",
-                                                      };
+                          : RefreshIndicator(
+                              onRefresh: () async {
+                                bedAssignController.changeIndex(bedAssignController.currentIndex.value);
+                              },
+                              child: AnimationLimiter(
+                                child: ListView.builder(
+                                  physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+                                  itemCount: bedAssignController.bedAssignFilterModel?.data?.length ?? 3,
+                                  itemBuilder: (context, index) {
+                                    return AnimationConfiguration.staggeredList(
+                                      position: index,
+                                      duration: const Duration(milliseconds: 1000),
+                                      child: SlideAnimation(
+                                        verticalOffset: 50.0,
+                                        child: FadeInAnimation(
+                                          child: Column(
+                                            children: [
+                                              Slidable(
+                                                startActionPane: ActionPane(
+                                                  extentRatio: 0.25,
+                                                  motion: const ScrollMotion(),
+                                                  children: [
+                                                    SlidableAction(
+                                                      onPressed: (context) async {
+                                                        var data = {
+                                                          "bed": "${bedAssignController.bedAssignFilterModel?.data?[index].bed}",
+                                                          "bedId": "${bedAssignController.bedAssignFilterModel?.data?[index].bed_id}",
+                                                          "assignDate": "${bedAssignController.bedAssignFilterModel?.data?[index].assign_date}",
+                                                          "assignId": "${bedAssignController.bedAssignFilterModel?.data?[index].id}",
+                                                        };
 
-                                                      final result = await Get.to(
-                                                        () => EditBedScreen(),
-                                                        arguments: data,
-                                                      );
-                                                      if (result == "Call API") {
-                                                        bedAssignController.getBedAssignData();
-                                                      }
-                                                    },
-                                                    backgroundColor: ColorConst.orangeColor.withOpacity(0.15),
-                                                    label: StringUtils.edit,
-                                                    foregroundColor: ColorConst.orangeColor,
-                                                  ),
-                                                ],
-                                              ),
-                                              endActionPane: ActionPane(
-                                                extentRatio: 0.25,
-                                                motion: const ScrollMotion(),
-                                                children: [
-                                                  SlidableAction(
-                                                    onPressed: (context) {
-                                                      ContentOfDialog contentOfDialog = ContentOfDialog(
-                                                        height: height,
-                                                        width: width,
-                                                        image: ImageUtils.deleteIcon,
-                                                        title: "Delete",
-                                                        description: "Are you sure want to delete this bed",
-                                                        leftText: "Delete",
-                                                        rightText: "Cancel",
-                                                        leftTapEvent: () {
-                                                          Get.back();
-                                                          bedAssignController.deleteBedAssign(
-                                                            context,
-                                                            "${bedAssignController.bedAssignFilterModel?.data?[index].id ?? 0}",
-                                                            bedAssignController.currentIndex.value,
-                                                          );
-                                                        },
-                                                        rightTapEvent: () {
-                                                          Get.back();
-                                                        },
-                                                      );
-                                                      CommonAlertDialog.commonAlertDialog(context, contentOfDialog);
-                                                    },
-                                                    backgroundColor: const Color(0xFFFCE5E5),
-                                                    foregroundColor: ColorConst.redColor,
-                                                    label: StringUtils.delete,
-                                                    // lableColor: ColorConst.redColor,
-                                                  ),
-                                                ],
-                                              ),
-                                              child: ListTile(
-                                                onTap: () {
-                                                  Get.to(
-                                                    () => const BedDetails(),
-                                                    arguments: bedAssignController.bedAssignFilterModel?.data?[index].id ?? 0,
-                                                  );
-                                                },
-                                                title: Text(
-                                                  bedAssignController.bedAssignFilterModel?.data?[index].patient_name ?? "",
-                                                  style: TextStyleConst.mediumTextStyle(
-                                                    ColorConst.blackColor,
-                                                    width * 0.045,
-                                                  ),
-                                                ),
-                                                subtitle: RichText(
-                                                  text: TextSpan(
-                                                    text: bedAssignController.bedAssignFilterModel?.data?[index].bed ?? "",
-                                                    style: TextStyleConst.mediumTextStyle(
-                                                      ColorConst.hintGreyColor,
-                                                      width * 0.036,
+                                                        final result = await Get.to(
+                                                          () => EditBedScreen(),
+                                                          arguments: data,
+                                                        );
+                                                        if (result == "Call API") {
+                                                          bedAssignController.changeIndex(bedAssignController.currentIndex.value);
+                                                        }
+                                                      },
+                                                      backgroundColor: ColorConst.orangeColor.withOpacity(0.15),
+                                                      label: StringUtils.edit,
+                                                      foregroundColor: ColorConst.orangeColor,
                                                     ),
-                                                    children: [
-                                                      const TextSpan(text: " | ", style: TextStyle(color: ColorConst.primaryColor)),
-                                                      TextSpan(
-                                                          text: bedAssignController.bedAssignFilterModel?.data?[index].case_id ?? "",
-                                                          style: TextStyleConst.mediumTextStyle(ColorConst.hintGreyColor, width * 0.036)),
-                                                      const TextSpan(text: " | ", style: TextStyle(color: ColorConst.primaryColor)),
-                                                      TextSpan(
-                                                        text: bedAssignController.bedAssignFilterModel?.data?[index].assign_date ?? "",
-                                                        style: TextStyleConst.mediumTextStyle(
-                                                          ColorConst.hintGreyColor,
-                                                          width * 0.036,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
+                                                  ],
                                                 ),
-                                                leading: Container(
-                                                  height: 60,
-                                                  width: 60,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    image: DecorationImage(
-                                                      fit: BoxFit.cover,
-                                                      image: NetworkImage(
-                                                        bedAssignController.bedAssignFilterModel?.data?[index].patient_image ??
-                                                            "https://i.pinimg.com/originals/d7/be/ca/d7beca2c21d4600d065b8331775aa1f5.jpg",
+                                                endActionPane: ActionPane(
+                                                  extentRatio: 0.25,
+                                                  motion: const ScrollMotion(),
+                                                  children: [
+                                                    SlidableAction(
+                                                      onPressed: (context) {
+                                                        ContentOfDialog contentOfDialog = ContentOfDialog(
+                                                          height: height,
+                                                          width: width,
+                                                          image: ImageUtils.deleteIcon,
+                                                          title: "Delete",
+                                                          description: "Are you sure want to delete this bed",
+                                                          leftText: "Delete",
+                                                          rightText: "Cancel",
+                                                          leftTapEvent: () {
+                                                            Get.back();
+                                                            bedAssignController.deleteBedAssign(
+                                                              context,
+                                                              "${bedAssignController.bedAssignFilterModel?.data?[index].id ?? 0}",
+                                                              bedAssignController.currentIndex.value,
+                                                            );
+                                                          },
+                                                          rightTapEvent: () {
+                                                            Get.back();
+                                                          },
+                                                        );
+                                                        CommonAlertDialog.commonAlertDialog(context, contentOfDialog);
+                                                      },
+                                                      backgroundColor: const Color(0xFFFCE5E5),
+                                                      foregroundColor: ColorConst.redColor,
+                                                      label: StringUtils.delete,
+                                                      // lableColor: ColorConst.redColor,
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: ListTile(
+                                                  onTap: () {
+                                                    Get.to(
+                                                      () => const BedDetails(),
+                                                      arguments: bedAssignController.bedAssignFilterModel?.data?[index].id ?? 0,
+                                                    );
+                                                  },
+                                                  title: Text(
+                                                    bedAssignController.bedAssignFilterModel?.data?[index].patient_name ?? "",
+                                                    style: TextStyleConst.mediumTextStyle(
+                                                      ColorConst.blackColor,
+                                                      width * 0.045,
+                                                    ),
+                                                  ),
+                                                  subtitle: RichText(
+                                                    text: TextSpan(
+                                                      text: bedAssignController.bedAssignFilterModel?.data?[index].bed ?? "",
+                                                      style: TextStyleConst.mediumTextStyle(
+                                                        ColorConst.hintGreyColor,
+                                                        width * 0.036,
+                                                      ),
+                                                      children: [
+                                                        const TextSpan(text: " | ", style: TextStyle(color: ColorConst.primaryColor)),
+                                                        TextSpan(
+                                                            text: bedAssignController.bedAssignFilterModel?.data?[index].case_id ?? "",
+                                                            style: TextStyleConst.mediumTextStyle(ColorConst.hintGreyColor, width * 0.036)),
+                                                        const TextSpan(text: " | ", style: TextStyle(color: ColorConst.primaryColor)),
+                                                        TextSpan(
+                                                          text: bedAssignController.bedAssignFilterModel?.data?[index].assign_date ?? "",
+                                                          style: TextStyleConst.mediumTextStyle(
+                                                            ColorConst.hintGreyColor,
+                                                            width * 0.036,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  leading: Container(
+                                                    height: 60,
+                                                    width: 60,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      image: DecorationImage(
+                                                        fit: BoxFit.cover,
+                                                        image: NetworkImage(
+                                                          bedAssignController.bedAssignFilterModel?.data?[index].patient_image ??
+                                                              "https://i.pinimg.com/originals/d7/be/ca/d7beca2c21d4600d065b8331775aa1f5.jpg",
+                                                        ),
                                                       ),
                                                     ),
+                                                    // child: CachedNetworkImage(
+                                                    //   imageUrl:
+                                                    //       appointmentModel!.data![index].doctor_image_url!,
+                                                    //   placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                                                    //   errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                    // ),
                                                   ),
-                                                  // child: CachedNetworkImage(
-                                                  //   imageUrl:
-                                                  //       appointmentModel!.data![index].doctor_image_url!,
-                                                  //   placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                                                  //   errorWidget: (context, url, error) => const Icon(Icons.error),
-                                                  // ),
                                                 ),
                                               ),
-                                            ),
-                                            SizedBox(height: height * 0.01),
-                                          ],
+                                              SizedBox(height: height * 0.01),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                },
+                                    );
+                                  },
+                                ),
                               ),
                             );
                 }),

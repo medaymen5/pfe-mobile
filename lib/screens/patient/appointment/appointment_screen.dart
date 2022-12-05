@@ -113,52 +113,105 @@ class AppointmentScreen extends StatelessWidget {
                   return doctorFilterAppointmentController.isDoctorFilterApiCall.value != false
                       ? doctorFilterAppointmentController.doctorAppointmentModel!.data!.isNotEmpty
                           ? Expanded(
-                              child: AnimationLimiter(
-                                child: ListView.builder(
-                                  physics: const BouncingScrollPhysics(),
-                                  itemCount: doctorFilterAppointmentController.doctorAppointmentModel!.data!.length,
-                                  itemBuilder: (context, index) {
-                                    return AnimationConfiguration.staggeredList(
-                                      position: index,
-                                      duration: const Duration(milliseconds: 1000),
-                                      child: SlideAnimation(
-                                        verticalOffset: 50.0,
-                                        child: FadeInAnimation(
-                                          child: Column(
-                                            children: [
-                                              doctorAppointmentController.currentIndex.value == 0
-                                                  ? Slidable(
-                                                      endActionPane: ActionPane(
-                                                        extentRatio: 0.25,
-                                                        motion: const ScrollMotion(),
-                                                        children: [
-                                                          SlidableAction(
-                                                            onPressed: (context) {
-                                                              ContentOfDialog contentOfDialog = ContentOfDialog(
-                                                                height: height,
-                                                                width: width,
-                                                                image: ImageUtils.alertIcon,
-                                                                title: "Change status",
-                                                                description: "Are you sure want to change\nappointment status?",
-                                                                leftText: StringUtils.confirm,
-                                                                rightText: StringUtils.cancel,
-                                                                leftTapEvent: () {
-                                                                  doctorFilterAppointmentController.confirmAppointment(
-                                                                      doctorFilterAppointmentController.doctorAppointmentModel!.data![index].id!);
-                                                                },
-                                                                rightTapEvent: () {
-                                                                  Get.back();
-                                                                },
-                                                              );
-                                                              CommonAlertDialog.commonAlertDialog(context, contentOfDialog);
-                                                            },
-                                                            backgroundColor: const Color(0xFFE5F6EA),
-                                                            foregroundColor: ColorConst.greenColor,
-                                                            label: StringUtils.confirm,
+                              child: RefreshIndicator(
+                                onRefresh: () async {
+                                  doctorFilterAppointmentController.changeDoctorIndex(doctorAppointmentController.currentIndex.value);
+                                },
+                                child: AnimationLimiter(
+                                  child: ListView.builder(
+                                    physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+                                    itemCount: doctorFilterAppointmentController.doctorAppointmentModel!.data!.length,
+                                    itemBuilder: (context, index) {
+                                      return AnimationConfiguration.staggeredList(
+                                        position: index,
+                                        duration: const Duration(milliseconds: 1000),
+                                        child: SlideAnimation(
+                                          verticalOffset: 50.0,
+                                          child: FadeInAnimation(
+                                            child: Column(
+                                              children: [
+                                                doctorAppointmentController.currentIndex.value == 0
+                                                    ? Slidable(
+                                                        endActionPane: ActionPane(
+                                                          extentRatio: 0.25,
+                                                          motion: const ScrollMotion(),
+                                                          children: [
+                                                            SlidableAction(
+                                                              onPressed: (context) {
+                                                                ContentOfDialog contentOfDialog = ContentOfDialog(
+                                                                  height: height,
+                                                                  width: width,
+                                                                  image: ImageUtils.alertIcon,
+                                                                  title: "Change status",
+                                                                  description: "Are you sure want to change\nappointment status?",
+                                                                  leftText: StringUtils.confirm,
+                                                                  rightText: StringUtils.cancel,
+                                                                  leftTapEvent: () {
+                                                                    doctorFilterAppointmentController.confirmAppointment(
+                                                                        doctorFilterAppointmentController.doctorAppointmentModel!.data![index].id!);
+                                                                  },
+                                                                  rightTapEvent: () {
+                                                                    Get.back();
+                                                                  },
+                                                                );
+                                                                CommonAlertDialog.commonAlertDialog(context, contentOfDialog);
+                                                              },
+                                                              backgroundColor: const Color(0xFFE5F6EA),
+                                                              foregroundColor: ColorConst.greenColor,
+                                                              label: StringUtils.confirm,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        child: ListTile(
+                                                          title: Text(
+                                                            doctorFilterAppointmentController.doctorAppointmentModel!.data![index].patient_name!,
+                                                            style: TextStyleConst.mediumTextStyle(
+                                                              ColorConst.blackColor,
+                                                              width * 0.045,
+                                                            ),
                                                           ),
-                                                        ],
-                                                      ),
-                                                      child: ListTile(
+                                                          subtitle: Row(
+                                                            children: [
+                                                              Text(
+                                                                "${doctorFilterAppointmentController.doctorAppointmentModel!.data![index].appointment_time!} - ",
+                                                                style: TextStyleConst.mediumTextStyle(
+                                                                  ColorConst.hintGreyColor,
+                                                                  width * 0.036,
+                                                                ),
+                                                              ),
+                                                              Flexible(
+                                                                child: Text(
+                                                                  doctorFilterAppointmentController
+                                                                      .doctorAppointmentModel!.data![index].appointment_date!,
+                                                                  style: TextStyleConst.mediumTextStyle(
+                                                                    ColorConst.hintGreyColor,
+                                                                    width * 0.036,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          leading: Container(
+                                                            height: 60,
+                                                            width: 60,
+                                                            decoration: BoxDecoration(
+                                                              shape: BoxShape.circle,
+                                                              image: DecorationImage(
+                                                                fit: BoxFit.cover,
+                                                                image: NetworkImage(doctorFilterAppointmentController
+                                                                    .doctorAppointmentModel!.data![index].patient_image!),
+                                                              ),
+                                                            ),
+                                                            // child: CachedNetworkImage(
+                                                            //   imageUrl:
+                                                            //       appointmentModel!.data![index].doctor_image_url!,
+                                                            //   placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                                                            //   errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                            // ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : ListTile(
                                                         title: Text(
                                                           doctorFilterAppointmentController.doctorAppointmentModel!.data![index].patient_name!,
                                                           style: TextStyleConst.mediumTextStyle(
@@ -206,62 +259,14 @@ class AppointmentScreen extends StatelessWidget {
                                                           // ),
                                                         ),
                                                       ),
-                                                    )
-                                                  : ListTile(
-                                                      title: Text(
-                                                        doctorFilterAppointmentController.doctorAppointmentModel!.data![index].patient_name!,
-                                                        style: TextStyleConst.mediumTextStyle(
-                                                          ColorConst.blackColor,
-                                                          width * 0.045,
-                                                        ),
-                                                      ),
-                                                      subtitle: Row(
-                                                        children: [
-                                                          Text(
-                                                            "${doctorFilterAppointmentController.doctorAppointmentModel!.data![index].appointment_time!} - ",
-                                                            style: TextStyleConst.mediumTextStyle(
-                                                              ColorConst.hintGreyColor,
-                                                              width * 0.036,
-                                                            ),
-                                                          ),
-                                                          Flexible(
-                                                            child: Text(
-                                                              doctorFilterAppointmentController
-                                                                  .doctorAppointmentModel!.data![index].appointment_date!,
-                                                              style: TextStyleConst.mediumTextStyle(
-                                                                ColorConst.hintGreyColor,
-                                                                width * 0.036,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      leading: Container(
-                                                        height: 60,
-                                                        width: 60,
-                                                        decoration: BoxDecoration(
-                                                          shape: BoxShape.circle,
-                                                          image: DecorationImage(
-                                                            fit: BoxFit.cover,
-                                                            image: NetworkImage(doctorFilterAppointmentController
-                                                                .doctorAppointmentModel!.data![index].patient_image!),
-                                                          ),
-                                                        ),
-                                                        // child: CachedNetworkImage(
-                                                        //   imageUrl:
-                                                        //       appointmentModel!.data![index].doctor_image_url!,
-                                                        //   placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                                                        //   errorWidget: (context, url, error) => const Icon(Icons.error),
-                                                        // ),
-                                                      ),
-                                                    ),
-                                              SizedBox(height: height * 0.01),
-                                            ],
+                                                SizedBox(height: height * 0.01),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  },
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                             )
@@ -289,423 +294,428 @@ class AppointmentScreen extends StatelessWidget {
                   return filterAppointmentController.isApiCall.value != false
                       ? filterAppointmentController.filterAppointmentModel!.data!.isNotEmpty
                           ? Expanded(
-                              child: AnimationLimiter(
-                                child: ListView.builder(
-                                  physics: const BouncingScrollPhysics(),
-                                  itemCount: filterAppointmentController.filterAppointmentModel!.data!.length,
-                                  itemBuilder: (context, index) {
-                                    return AnimationConfiguration.staggeredList(
-                                      position: index,
-                                      duration: const Duration(milliseconds: 1000),
-                                      child: SlideAnimation(
-                                        verticalOffset: 50.0,
-                                        child: FadeInAnimation(
-                                          child: Column(
-                                            children: [
-                                              appointmentController.currentIndex.value == 1
-                                                  ? Slidable(
-                                                      startActionPane: ActionPane(
-                                                        extentRatio: 0.25,
-                                                        motion: const ScrollMotion(),
-                                                        children: [
-                                                          SlidableAction(
-                                                            onPressed: (context) {
-                                                              showDialog(
-                                                                barrierDismissible: false,
-                                                                context: context,
-                                                                builder: (context) {
-                                                                  return Center(
-                                                                    child: Container(
-                                                                      height: height / 2.7,
-                                                                      width: width / 1.12,
-                                                                      decoration: BoxDecoration(
-                                                                        borderRadius: BorderRadius.circular(15),
-                                                                        color: Colors.white,
-                                                                      ),
-                                                                      child: Column(
-                                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                                        children: [
-                                                                          Container(
-                                                                            height: 60,
-                                                                            width: 60,
-                                                                            decoration: const BoxDecoration(
-                                                                              image: DecorationImage(
-                                                                                image: AssetImage(ImageUtils.alertIcon),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(height: height * 0.03),
-                                                                          Text(
-                                                                            "Cancel Appointment",
-                                                                            style: TextStyleConst.boldTextStyle(
-                                                                              ColorConst.blackColor,
-                                                                              width * 0.05,
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(height: height * 0.01),
-                                                                          Text(
-                                                                            "Are you sure want to cancel\n Appointment?",
-                                                                            textAlign: TextAlign.center,
-                                                                            style: TextStyleConst.mediumTextStyle(
-                                                                              ColorConst.hintGreyColor,
-                                                                              width * 0.042,
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(height: height * 0.03),
-                                                                          Row(
-                                                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                            children: [
-                                                                              CommonButton(
-                                                                                textStyleConst: TextStyleConst.mediumTextStyle(
-                                                                                    ColorConst.whiteColor, width * 0.05),
-                                                                                onTap: () {
-                                                                                  Get.back();
-                                                                                  filterAppointmentController.cancelledPendingAppointment(
-                                                                                      filterAppointmentController
-                                                                                          .filterAppointmentModel!.data![index].id!);
-                                                                                },
-                                                                                color: ColorConst.blueColor,
-                                                                                text: StringUtils.yes,
-                                                                                width: width / 2.5,
-                                                                                height: 50,
-                                                                              ),
-                                                                              CommonButton(
-                                                                                textStyleConst: TextStyleConst.mediumTextStyle(
-                                                                                    ColorConst.hintGreyColor, width * 0.05),
-                                                                                onTap: () {
-                                                                                  Get.back();
-                                                                                },
-                                                                                color: ColorConst.borderGreyColor,
-                                                                                text: StringUtils.no,
-                                                                                width: width / 2.5,
-                                                                                height: 50,
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                },
-                                                              );
-                                                            },
-                                                            backgroundColor: ColorConst.borderGreyColor,
-                                                            foregroundColor: ColorConst.blackColor,
-                                                            label: StringUtils.cancel,
-                                                            // lableColor: ColorConst.hintGreyColor,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      endActionPane: ActionPane(
-                                                        extentRatio: 0.25,
-                                                        motion: const ScrollMotion(),
-                                                        children: [
-                                                          SlidableAction(
-                                                            onPressed: (context) {
-                                                              showDialog(
-                                                                barrierDismissible: false,
-                                                                context: context,
-                                                                builder: (context) {
-                                                                  return Center(
-                                                                    child: Container(
-                                                                      height: height / 2.7,
-                                                                      width: width / 1.12,
-                                                                      decoration: BoxDecoration(
-                                                                        borderRadius: BorderRadius.circular(15),
-                                                                        color: Colors.white,
-                                                                      ),
-                                                                      child: Column(
-                                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                                        children: [
-                                                                          Container(
-                                                                            height: 60,
-                                                                            width: 60,
-                                                                            decoration: const BoxDecoration(
-                                                                              image: DecorationImage(
-                                                                                image: AssetImage(ImageUtils.deleteIcon),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(height: height * 0.03),
-                                                                          Text(
-                                                                            "Delete",
-                                                                            style: TextStyleConst.boldTextStyle(
-                                                                              ColorConst.blackColor,
-                                                                              width * 0.05,
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(height: height * 0.01),
-                                                                          Text(
-                                                                            "Are you sure want to delete this\n appointment?",
-                                                                            textAlign: TextAlign.center,
-                                                                            style: TextStyleConst.mediumTextStyle(
-                                                                              ColorConst.hintGreyColor,
-                                                                              width * 0.042,
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(height: height * 0.03),
-                                                                          Row(
-                                                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                            children: [
-                                                                              CommonButton(
-                                                                                textStyleConst: TextStyleConst.mediumTextStyle(
-                                                                                  ColorConst.whiteColor,
-                                                                                  width * 0.05,
-                                                                                ),
-                                                                                onTap: () {
-                                                                                  Get.back();
-                                                                                  filterAppointmentController.deletePendingAppointment(
-                                                                                      filterAppointmentController
-                                                                                          .filterAppointmentModel!.data![index].id!);
-                                                                                },
-                                                                                color: ColorConst.blueColor,
-                                                                                text: StringUtils.delete,
-                                                                                width: width / 2.5,
-                                                                                height: 50,
-                                                                              ),
-                                                                              CommonButton(
-                                                                                textStyleConst: TextStyleConst.mediumTextStyle(
-                                                                                  ColorConst.hintGreyColor,
-                                                                                  width * 0.05,
-                                                                                ),
-                                                                                onTap: () {
-                                                                                  Get.back();
-                                                                                },
-                                                                                color: ColorConst.borderGreyColor,
-                                                                                text: StringUtils.cancel,
-                                                                                width: width / 2.5,
-                                                                                height: 50,
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                },
-                                                              );
-                                                            },
-                                                            backgroundColor: const Color(0xFFFCE5E5),
-                                                            foregroundColor: ColorConst.redColor,
-                                                            label: StringUtils.delete,
-                                                            // lableColor: ColorConst.redColor,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      child: ListTile(
-                                                        title: Text(
-                                                          filterAppointmentController.filterAppointmentModel!.data![index].doctor_name!,
-                                                          style: TextStyleConst.mediumTextStyle(
-                                                            ColorConst.blackColor,
-                                                            width * 0.045,
-                                                          ),
-                                                        ),
-                                                        subtitle: Row(
+                              child: RefreshIndicator(
+                                onRefresh: () async {
+                                  filterAppointmentController.changeIndex(appointmentController.currentIndex.value);
+                                },
+                                child: AnimationLimiter(
+                                  child: ListView.builder(
+                                    physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+                                    itemCount: filterAppointmentController.filterAppointmentModel!.data!.length,
+                                    itemBuilder: (context, index) {
+                                      return AnimationConfiguration.staggeredList(
+                                        position: index,
+                                        duration: const Duration(milliseconds: 1000),
+                                        child: SlideAnimation(
+                                          verticalOffset: 50.0,
+                                          child: FadeInAnimation(
+                                            child: Column(
+                                              children: [
+                                                appointmentController.currentIndex.value == 1
+                                                    ? Slidable(
+                                                        startActionPane: ActionPane(
+                                                          extentRatio: 0.25,
+                                                          motion: const ScrollMotion(),
                                                           children: [
-                                                            Text(
-                                                              "${filterAppointmentController.filterAppointmentModel!.data![index].doctor_department!} | ",
-                                                              style: TextStyleConst.mediumTextStyle(
-                                                                ColorConst.hintGreyColor,
-                                                                width * 0.036,
-                                                              ),
+                                                            SlidableAction(
+                                                              onPressed: (context) {
+                                                                showDialog(
+                                                                  barrierDismissible: false,
+                                                                  context: context,
+                                                                  builder: (context) {
+                                                                    return Center(
+                                                                      child: Container(
+                                                                        height: height / 2.7,
+                                                                        width: width / 1.12,
+                                                                        decoration: BoxDecoration(
+                                                                          borderRadius: BorderRadius.circular(15),
+                                                                          color: Colors.white,
+                                                                        ),
+                                                                        child: Column(
+                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                          children: [
+                                                                            Container(
+                                                                              height: 60,
+                                                                              width: 60,
+                                                                              decoration: const BoxDecoration(
+                                                                                image: DecorationImage(
+                                                                                  image: AssetImage(ImageUtils.alertIcon),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            SizedBox(height: height * 0.03),
+                                                                            Text(
+                                                                              "Cancel Appointment",
+                                                                              style: TextStyleConst.boldTextStyle(
+                                                                                ColorConst.blackColor,
+                                                                                width * 0.05,
+                                                                              ),
+                                                                            ),
+                                                                            SizedBox(height: height * 0.01),
+                                                                            Text(
+                                                                              "Are you sure want to cancel\n Appointment?",
+                                                                              textAlign: TextAlign.center,
+                                                                              style: TextStyleConst.mediumTextStyle(
+                                                                                ColorConst.hintGreyColor,
+                                                                                width * 0.042,
+                                                                              ),
+                                                                            ),
+                                                                            SizedBox(height: height * 0.03),
+                                                                            Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                              children: [
+                                                                                CommonButton(
+                                                                                  textStyleConst: TextStyleConst.mediumTextStyle(
+                                                                                      ColorConst.whiteColor, width * 0.05),
+                                                                                  onTap: () {
+                                                                                    Get.back();
+                                                                                    filterAppointmentController.cancelledPendingAppointment(
+                                                                                        filterAppointmentController
+                                                                                            .filterAppointmentModel!.data![index].id!);
+                                                                                  },
+                                                                                  color: ColorConst.blueColor,
+                                                                                  text: StringUtils.yes,
+                                                                                  width: width / 2.5,
+                                                                                  height: 50,
+                                                                                ),
+                                                                                CommonButton(
+                                                                                  textStyleConst: TextStyleConst.mediumTextStyle(
+                                                                                      ColorConst.hintGreyColor, width * 0.05),
+                                                                                  onTap: () {
+                                                                                    Get.back();
+                                                                                  },
+                                                                                  color: ColorConst.borderGreyColor,
+                                                                                  text: StringUtils.no,
+                                                                                  width: width / 2.5,
+                                                                                  height: 50,
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                );
+                                                              },
+                                                              backgroundColor: ColorConst.borderGreyColor,
+                                                              foregroundColor: ColorConst.blackColor,
+                                                              label: StringUtils.cancel,
+                                                              // lableColor: ColorConst.hintGreyColor,
                                                             ),
-                                                            Text(
-                                                              "${filterAppointmentController.filterAppointmentModel!.data![index].appointment_time!} - ",
-                                                              style: TextStyleConst.mediumTextStyle(
-                                                                ColorConst.hintGreyColor,
-                                                                width * 0.036,
-                                                              ),
+                                                          ],
+                                                        ),
+                                                        endActionPane: ActionPane(
+                                                          extentRatio: 0.25,
+                                                          motion: const ScrollMotion(),
+                                                          children: [
+                                                            SlidableAction(
+                                                              onPressed: (context) {
+                                                                showDialog(
+                                                                  barrierDismissible: false,
+                                                                  context: context,
+                                                                  builder: (context) {
+                                                                    return Center(
+                                                                      child: Container(
+                                                                        height: height / 2.7,
+                                                                        width: width / 1.12,
+                                                                        decoration: BoxDecoration(
+                                                                          borderRadius: BorderRadius.circular(15),
+                                                                          color: Colors.white,
+                                                                        ),
+                                                                        child: Column(
+                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                          children: [
+                                                                            Container(
+                                                                              height: 60,
+                                                                              width: 60,
+                                                                              decoration: const BoxDecoration(
+                                                                                image: DecorationImage(
+                                                                                  image: AssetImage(ImageUtils.deleteIcon),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            SizedBox(height: height * 0.03),
+                                                                            Text(
+                                                                              "Delete",
+                                                                              style: TextStyleConst.boldTextStyle(
+                                                                                ColorConst.blackColor,
+                                                                                width * 0.05,
+                                                                              ),
+                                                                            ),
+                                                                            SizedBox(height: height * 0.01),
+                                                                            Text(
+                                                                              "Are you sure want to delete this\n appointment?",
+                                                                              textAlign: TextAlign.center,
+                                                                              style: TextStyleConst.mediumTextStyle(
+                                                                                ColorConst.hintGreyColor,
+                                                                                width * 0.042,
+                                                                              ),
+                                                                            ),
+                                                                            SizedBox(height: height * 0.03),
+                                                                            Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                              children: [
+                                                                                CommonButton(
+                                                                                  textStyleConst: TextStyleConst.mediumTextStyle(
+                                                                                    ColorConst.whiteColor,
+                                                                                    width * 0.05,
+                                                                                  ),
+                                                                                  onTap: () {
+                                                                                    Get.back();
+                                                                                    filterAppointmentController.deletePendingAppointment(
+                                                                                        filterAppointmentController
+                                                                                            .filterAppointmentModel!.data![index].id!);
+                                                                                  },
+                                                                                  color: ColorConst.blueColor,
+                                                                                  text: StringUtils.delete,
+                                                                                  width: width / 2.5,
+                                                                                  height: 50,
+                                                                                ),
+                                                                                CommonButton(
+                                                                                  textStyleConst: TextStyleConst.mediumTextStyle(
+                                                                                    ColorConst.hintGreyColor,
+                                                                                    width * 0.05,
+                                                                                  ),
+                                                                                  onTap: () {
+                                                                                    Get.back();
+                                                                                  },
+                                                                                  color: ColorConst.borderGreyColor,
+                                                                                  text: StringUtils.cancel,
+                                                                                  width: width / 2.5,
+                                                                                  height: 50,
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                );
+                                                              },
+                                                              backgroundColor: const Color(0xFFFCE5E5),
+                                                              foregroundColor: ColorConst.redColor,
+                                                              label: StringUtils.delete,
+                                                              // lableColor: ColorConst.redColor,
                                                             ),
-                                                            Flexible(
-                                                              child: Text(
-                                                                filterAppointmentController.filterAppointmentModel!.data![index].appointment_date!,
+                                                          ],
+                                                        ),
+                                                        child: ListTile(
+                                                          title: Text(
+                                                            filterAppointmentController.filterAppointmentModel!.data![index].doctor_name!,
+                                                            style: TextStyleConst.mediumTextStyle(
+                                                              ColorConst.blackColor,
+                                                              width * 0.045,
+                                                            ),
+                                                          ),
+                                                          subtitle: Row(
+                                                            children: [
+                                                              Text(
+                                                                "${filterAppointmentController.filterAppointmentModel!.data![index].doctor_department!} | ",
                                                                 style: TextStyleConst.mediumTextStyle(
                                                                   ColorConst.hintGreyColor,
                                                                   width * 0.036,
                                                                 ),
                                                               ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        leading: Container(
-                                                          height: 60,
-                                                          width: 60,
-                                                          decoration: BoxDecoration(
-                                                            shape: BoxShape.circle,
-                                                            image: DecorationImage(
-                                                              fit: BoxFit.cover,
-                                                              image: NetworkImage(
-                                                                  filterAppointmentController.filterAppointmentModel!.data![index].doctor_image_url!),
-                                                            ),
-                                                          ),
-                                                          // child: CachedNetworkImage(
-                                                          //   imageUrl:
-                                                          //       appointmentModel!.data![index].doctor_image_url!,
-                                                          //   placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                                                          //   errorWidget: (context, url, error) => const Icon(Icons.error),
-                                                          // ),
-                                                        ),
-                                                      ),
-                                                    )
-                                                  : Slidable(
-                                                      endActionPane: ActionPane(
-                                                        extentRatio: 0.25,
-                                                        motion: const ScrollMotion(),
-                                                        children: [
-                                                          SlidableAction(
-                                                            onPressed: (context) {
-                                                              showDialog(
-                                                                barrierDismissible: false,
-                                                                context: context,
-                                                                builder: (context) {
-                                                                  return Center(
-                                                                    child: Container(
-                                                                      height: height / 2.7,
-                                                                      width: width / 1.12,
-                                                                      decoration: BoxDecoration(
-                                                                        borderRadius: BorderRadius.circular(15),
-                                                                        color: Colors.white,
-                                                                      ),
-                                                                      child: Column(
-                                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                                        children: [
-                                                                          Container(
-                                                                            height: 60,
-                                                                            width: 60,
-                                                                            decoration: const BoxDecoration(
-                                                                              image: DecorationImage(
-                                                                                image: AssetImage(ImageUtils.deleteIcon),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(height: height * 0.03),
-                                                                          Text(
-                                                                            "Delete",
-                                                                            style: TextStyleConst.boldTextStyle(
-                                                                              ColorConst.blackColor,
-                                                                              width * 0.05,
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(height: height * 0.01),
-                                                                          Text(
-                                                                            "Are you sure want to delete this\n appointment?",
-                                                                            textAlign: TextAlign.center,
-                                                                            style: TextStyleConst.mediumTextStyle(
-                                                                              ColorConst.hintGreyColor,
-                                                                              width * 0.042,
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(height: height * 0.03),
-                                                                          Row(
-                                                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                            children: [
-                                                                              CommonButton(
-                                                                                textStyleConst: TextStyleConst.mediumTextStyle(
-                                                                                  ColorConst.whiteColor,
-                                                                                  width * 0.05,
-                                                                                ),
-                                                                                onTap: () {
-                                                                                  Get.back();
-                                                                                  filterAppointmentController.deleteAppointment(
-                                                                                      filterAppointmentController
-                                                                                          .filterAppointmentModel!.data![index].id!);
-                                                                                },
-                                                                                color: ColorConst.blueColor,
-                                                                                text: StringUtils.delete,
-                                                                                width: width / 2.5,
-                                                                                height: 50,
-                                                                              ),
-                                                                              CommonButton(
-                                                                                textStyleConst: TextStyleConst.mediumTextStyle(
-                                                                                  ColorConst.hintGreyColor,
-                                                                                  width * 0.05,
-                                                                                ),
-                                                                                onTap: () {
-                                                                                  Get.back();
-                                                                                },
-                                                                                color: ColorConst.borderGreyColor,
-                                                                                text: StringUtils.cancel,
-                                                                                width: width / 2.5,
-                                                                                height: 50,
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                },
-                                                              );
-                                                            },
-                                                            backgroundColor: const Color(0xFFFCE5E5),
-                                                            foregroundColor: ColorConst.redColor,
-                                                            label: StringUtils.delete,
-                                                            // lableColor: Colors.red,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      child: ListTile(
-                                                        title: Text(
-                                                          filterAppointmentController.filterAppointmentModel!.data![index].doctor_name!,
-                                                          style: TextStyleConst.mediumTextStyle(
-                                                            ColorConst.blackColor,
-                                                            width * 0.045,
-                                                          ),
-                                                        ),
-                                                        subtitle: Row(
-                                                          children: [
-                                                            Text(
-                                                              "${filterAppointmentController.filterAppointmentModel!.data![index].doctor_department!} | ",
-                                                              style: TextStyleConst.mediumTextStyle(
-                                                                ColorConst.hintGreyColor,
-                                                                width * 0.036,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              "${filterAppointmentController.filterAppointmentModel!.data![index].appointment_time!} - ",
-                                                              style: TextStyleConst.mediumTextStyle(
-                                                                ColorConst.hintGreyColor,
-                                                                width * 0.036,
-                                                              ),
-                                                            ),
-                                                            Flexible(
-                                                              child: Text(
-                                                                filterAppointmentController.filterAppointmentModel!.data![index].appointment_date!,
+                                                              Text(
+                                                                "${filterAppointmentController.filterAppointmentModel!.data![index].appointment_time!} - ",
                                                                 style: TextStyleConst.mediumTextStyle(
                                                                   ColorConst.hintGreyColor,
                                                                   width * 0.036,
                                                                 ),
                                                               ),
+                                                              Flexible(
+                                                                child: Text(
+                                                                  filterAppointmentController.filterAppointmentModel!.data![index].appointment_date!,
+                                                                  style: TextStyleConst.mediumTextStyle(
+                                                                    ColorConst.hintGreyColor,
+                                                                    width * 0.036,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          leading: Container(
+                                                            height: 60,
+                                                            width: 60,
+                                                            decoration: BoxDecoration(
+                                                              shape: BoxShape.circle,
+                                                              image: DecorationImage(
+                                                                fit: BoxFit.cover,
+                                                                image: NetworkImage(filterAppointmentController
+                                                                    .filterAppointmentModel!.data![index].doctor_image_url!),
+                                                              ),
+                                                            ),
+                                                            // child: CachedNetworkImage(
+                                                            //   imageUrl:
+                                                            //       appointmentModel!.data![index].doctor_image_url!,
+                                                            //   placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                                                            //   errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                            // ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : Slidable(
+                                                        endActionPane: ActionPane(
+                                                          extentRatio: 0.25,
+                                                          motion: const ScrollMotion(),
+                                                          children: [
+                                                            SlidableAction(
+                                                              onPressed: (context) {
+                                                                showDialog(
+                                                                  barrierDismissible: false,
+                                                                  context: context,
+                                                                  builder: (context) {
+                                                                    return Center(
+                                                                      child: Container(
+                                                                        height: height / 2.7,
+                                                                        width: width / 1.12,
+                                                                        decoration: BoxDecoration(
+                                                                          borderRadius: BorderRadius.circular(15),
+                                                                          color: Colors.white,
+                                                                        ),
+                                                                        child: Column(
+                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                          children: [
+                                                                            Container(
+                                                                              height: 60,
+                                                                              width: 60,
+                                                                              decoration: const BoxDecoration(
+                                                                                image: DecorationImage(
+                                                                                  image: AssetImage(ImageUtils.deleteIcon),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            SizedBox(height: height * 0.03),
+                                                                            Text(
+                                                                              "Delete",
+                                                                              style: TextStyleConst.boldTextStyle(
+                                                                                ColorConst.blackColor,
+                                                                                width * 0.05,
+                                                                              ),
+                                                                            ),
+                                                                            SizedBox(height: height * 0.01),
+                                                                            Text(
+                                                                              "Are you sure want to delete this\n appointment?",
+                                                                              textAlign: TextAlign.center,
+                                                                              style: TextStyleConst.mediumTextStyle(
+                                                                                ColorConst.hintGreyColor,
+                                                                                width * 0.042,
+                                                                              ),
+                                                                            ),
+                                                                            SizedBox(height: height * 0.03),
+                                                                            Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                              children: [
+                                                                                CommonButton(
+                                                                                  textStyleConst: TextStyleConst.mediumTextStyle(
+                                                                                    ColorConst.whiteColor,
+                                                                                    width * 0.05,
+                                                                                  ),
+                                                                                  onTap: () {
+                                                                                    Get.back();
+                                                                                    filterAppointmentController.deleteAppointment(
+                                                                                        filterAppointmentController
+                                                                                            .filterAppointmentModel!.data![index].id!);
+                                                                                  },
+                                                                                  color: ColorConst.blueColor,
+                                                                                  text: StringUtils.delete,
+                                                                                  width: width / 2.5,
+                                                                                  height: 50,
+                                                                                ),
+                                                                                CommonButton(
+                                                                                  textStyleConst: TextStyleConst.mediumTextStyle(
+                                                                                    ColorConst.hintGreyColor,
+                                                                                    width * 0.05,
+                                                                                  ),
+                                                                                  onTap: () {
+                                                                                    Get.back();
+                                                                                  },
+                                                                                  color: ColorConst.borderGreyColor,
+                                                                                  text: StringUtils.cancel,
+                                                                                  width: width / 2.5,
+                                                                                  height: 50,
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                );
+                                                              },
+                                                              backgroundColor: const Color(0xFFFCE5E5),
+                                                              foregroundColor: ColorConst.redColor,
+                                                              label: StringUtils.delete,
+                                                              // lableColor: Colors.red,
                                                             ),
                                                           ],
                                                         ),
-                                                        leading: Container(
-                                                          height: 60,
-                                                          width: 60,
-                                                          decoration: BoxDecoration(
-                                                            shape: BoxShape.circle,
-                                                            image: DecorationImage(
-                                                              fit: BoxFit.cover,
-                                                              image: NetworkImage(
-                                                                  filterAppointmentController.filterAppointmentModel!.data![index].doctor_image_url!),
+                                                        child: ListTile(
+                                                          title: Text(
+                                                            filterAppointmentController.filterAppointmentModel!.data![index].doctor_name!,
+                                                            style: TextStyleConst.mediumTextStyle(
+                                                              ColorConst.blackColor,
+                                                              width * 0.045,
                                                             ),
                                                           ),
-                                                          // child: CachedNetworkImage(
-                                                          //   imageUrl:
-                                                          //       appointmentModel!.data![index].doctor_image_url!,
-                                                          //   placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                                                          //   errorWidget: (context, url, error) => const Icon(Icons.error),
-                                                          // ),
+                                                          subtitle: Row(
+                                                            children: [
+                                                              Text(
+                                                                "${filterAppointmentController.filterAppointmentModel!.data![index].doctor_department!} | ",
+                                                                style: TextStyleConst.mediumTextStyle(
+                                                                  ColorConst.hintGreyColor,
+                                                                  width * 0.036,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                "${filterAppointmentController.filterAppointmentModel!.data![index].appointment_time!} - ",
+                                                                style: TextStyleConst.mediumTextStyle(
+                                                                  ColorConst.hintGreyColor,
+                                                                  width * 0.036,
+                                                                ),
+                                                              ),
+                                                              Flexible(
+                                                                child: Text(
+                                                                  filterAppointmentController.filterAppointmentModel!.data![index].appointment_date!,
+                                                                  style: TextStyleConst.mediumTextStyle(
+                                                                    ColorConst.hintGreyColor,
+                                                                    width * 0.036,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          leading: Container(
+                                                            height: 60,
+                                                            width: 60,
+                                                            decoration: BoxDecoration(
+                                                              shape: BoxShape.circle,
+                                                              image: DecorationImage(
+                                                                fit: BoxFit.cover,
+                                                                image: NetworkImage(filterAppointmentController
+                                                                    .filterAppointmentModel!.data![index].doctor_image_url!),
+                                                              ),
+                                                            ),
+                                                            // child: CachedNetworkImage(
+                                                            //   imageUrl:
+                                                            //       appointmentModel!.data![index].doctor_image_url!,
+                                                            //   placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                                                            //   errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                            // ),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                              SizedBox(height: height * 0.01),
-                                            ],
+                                                SizedBox(height: height * 0.01),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  },
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                             )

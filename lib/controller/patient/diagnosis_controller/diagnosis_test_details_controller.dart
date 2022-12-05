@@ -35,9 +35,11 @@ class DiagnosisTestDetailsController extends GetxController {
   void listenDownload() {
     IsolateNameServer.registerPortWithName(receivePort.sendPort, "downloading");
     receivePort.listen((message) {
+      print("file not downloaded");
       progress.value = message[2];
       if (progress.value == 100) {
         if (isDownloading.value) {
+          print("file downloaded");
           DisplaySnackBar.displaySnackBar("Diagnosis tests PDF downloaded");
           isDownloading.value = false;
         }
@@ -46,6 +48,7 @@ class DiagnosisTestDetailsController extends GetxController {
     FlutterDownloader.registerCallback(downloadingCallback);
   }
 
+  @pragma('vm:entry-point')
   static downloadingCallback(id, status, progress) {
     SendPort? sendPort = IsolateNameServer.lookupPortByName("downloading");
     sendPort?.send([id, status, progress]);

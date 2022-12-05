@@ -30,60 +30,66 @@ class VaccinationScreen extends StatelessWidget {
                 )
               : Container(
                   color: ColorConst.whiteColor,
-                  child: AnimationLimiter(
-                    child: ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: vaccinationController.vaccinatedModel!.data!.length,
-                      itemBuilder: (context, index) {
-                        return AnimationConfiguration.staggeredList(
-                          position: index,
-                          duration: const Duration(milliseconds: 1000),
-                          child: SlideAnimation(
-                            verticalOffset: 50.0,
-                            child: FadeInAnimation(
-                              child: Container(
-                                margin: EdgeInsets.only(left: 15, right: 15, top: index == 0 ? 15 : 5),
-                                height: 60,
-                                color: Colors.transparent,
-                                width: double.infinity,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "${vaccinationController.vaccinatedModel!.data![index].vaccine_name} - ${vaccinationController.vaccinatedModel!.data![index].dose_number} Dose",
-                                      style: TextStyleConst.mediumTextStyle(
-                                        ColorConst.blackColor,
-                                        width * 0.045,
-                                      ),
-                                    ),
-                                    SizedBox(height: height * 0.004),
-                                    RichText(
-                                      text: TextSpan(
-                                        text: vaccinationController.vaccinatedModel!.data![index].serial_number,
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      vaccinationController.isGetVaccination.value = false;
+                      vaccinationController.getVaccination();
+                    },
+                    child: AnimationLimiter(
+                      child: ListView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+                        itemCount: vaccinationController.vaccinatedModel!.data!.length,
+                        itemBuilder: (context, index) {
+                          return AnimationConfiguration.staggeredList(
+                            position: index,
+                            duration: const Duration(milliseconds: 1000),
+                            child: SlideAnimation(
+                              verticalOffset: 50.0,
+                              child: FadeInAnimation(
+                                child: Container(
+                                  margin: EdgeInsets.only(left: 15, right: 15, top: index == 0 ? 15 : 5),
+                                  height: 60,
+                                  color: Colors.transparent,
+                                  width: double.infinity,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "${vaccinationController.vaccinatedModel!.data![index].vaccine_name} - ${vaccinationController.vaccinatedModel!.data![index].dose_number} Dose",
                                         style: TextStyleConst.mediumTextStyle(
-                                          Colors.green,
-                                          width * 0.037,
+                                          ColorConst.blackColor,
+                                          width * 0.045,
                                         ),
-                                        children: [
-                                          TextSpan(
-                                            text:
-                                                " | ${vaccinationController.vaccinatedModel!.data![index].time} - ${vaccinationController.vaccinatedModel!.data![index].date}",
-                                            style: TextStyleConst.mediumTextStyle(
-                                              ColorConst.hintGreyColor,
-                                              width * 0.037,
-                                            ),
-                                          ),
-                                        ],
                                       ),
-                                    )
-                                  ],
+                                      SizedBox(height: height * 0.004),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: vaccinationController.vaccinatedModel!.data![index].serial_number,
+                                          style: TextStyleConst.mediumTextStyle(
+                                            Colors.green,
+                                            width * 0.037,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text:
+                                                  " | ${vaccinationController.vaccinatedModel!.data![index].time} - ${vaccinationController.vaccinatedModel!.data![index].date}",
+                                              style: TextStyleConst.mediumTextStyle(
+                                                ColorConst.hintGreyColor,
+                                                width * 0.037,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ),
                 )

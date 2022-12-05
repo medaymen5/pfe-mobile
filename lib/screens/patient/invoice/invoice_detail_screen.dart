@@ -189,11 +189,14 @@ class InvoiceDetailScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               SizedBox(height: height * 0.003),
-                                              Text(
-                                                invoiceDetailsController.invoiceDetailsModel?.data?.invoice_items?[index].description ?? "N/A",
-                                                style: TextStyleConst.mediumTextStyle(
-                                                  ColorConst.hintGreyColor,
-                                                  width * 0.04,
+                                              SizedBox(
+                                                width: width * 0.55,
+                                                child: Text(
+                                                  invoiceDetailsController.invoiceDetailsModel?.data?.invoice_items?[index].description ?? "N/A",
+                                                  style: TextStyleConst.mediumTextStyle(
+                                                    ColorConst.hintGreyColor,
+                                                    width * 0.04,
+                                                  ),
                                                 ),
                                               )
                                             ],

@@ -31,80 +31,86 @@ class CaseScreen extends StatelessWidget {
                 )
               : Container(
                   color: ColorConst.whiteColor,
-                  child: AnimationLimiter(
-                    child: ListView.builder(
-                      itemCount: caseController.caseModel!.data!.length,
-                      physics: const BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return AnimationConfiguration.staggeredList(
-                          position: index,
-                          duration: const Duration(milliseconds: 1000),
-                          child: SlideAnimation(
-                            verticalOffset: 50.0,
-                            child: FadeInAnimation(
-                              child: ListTile(
-                                onTap: () {
-                                  Get.to(
-                                    () => CaseDetailScreen(),
-                                    transition: Transition.rightToLeft,
-                                    arguments: {
-                                      "case_id": caseController.caseModel!.data![index].case_id,
-                                      "case_date": caseController.caseModel!.data![index].case_date,
-                                      "doctor_name": caseController.caseModel!.data![index].doctor_name,
-                                      "case_time": caseController.caseModel!.data![index].case_time,
-                                      "fee": caseController.caseModel!.data![index].fee,
-                                      "created_on": caseController.caseModel!.data![index].created_on,
-                                      "status": caseController.caseModel!.data![index].status,
-                                      "currency": caseController.caseModel!.data![index].currency,
-                                      "description": caseController.caseModel!.data![index].description,
-                                    },
-                                  );
-                                },
-                                contentPadding: EdgeInsets.only(top: index == 0 ? 15 : 10, left: 15, right: 15),
-                                leading: Container(
-                                  height: 60,
-                                  width: 60,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(caseController.caseModel!.data![index].doctor_image!),
-                                    ),
-                                  ),
-                                ),
-                                title: Text(
-                                  caseController.caseModel!.data![index].doctor_name!,
-                                  style: TextStyleConst.mediumTextStyle(
-                                    ColorConst.blackColor,
-                                    width * 0.045,
-                                  ),
-                                ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(height: height * 0.002),
-                                    Text(
-                                      caseController.caseModel!.data![index].status!,
-                                      style: TextStyleConst.mediumTextStyle(
-                                        ColorConst.greenColor,
-                                        width * 0.035,
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      caseController.isGetCase.value = false;
+                      caseController.getCase();
+                    },
+                    child: AnimationLimiter(
+                      child: ListView.builder(
+                        itemCount: caseController.caseModel!.data!.length,
+                        physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+                        itemBuilder: (context, index) {
+                          return AnimationConfiguration.staggeredList(
+                            position: index,
+                            duration: const Duration(milliseconds: 1000),
+                            child: SlideAnimation(
+                              verticalOffset: 50.0,
+                              child: FadeInAnimation(
+                                child: ListTile(
+                                  onTap: () {
+                                    Get.to(
+                                      () => CaseDetailScreen(),
+                                      transition: Transition.rightToLeft,
+                                      arguments: {
+                                        "case_id": caseController.caseModel!.data![index].case_id,
+                                        "case_date": caseController.caseModel!.data![index].case_date,
+                                        "doctor_name": caseController.caseModel!.data![index].doctor_name,
+                                        "case_time": caseController.caseModel!.data![index].case_time,
+                                        "fee": caseController.caseModel!.data![index].fee,
+                                        "created_on": caseController.caseModel!.data![index].created_on,
+                                        "status": caseController.caseModel!.data![index].status,
+                                        "currency": caseController.caseModel!.data![index].currency,
+                                        "description": caseController.caseModel!.data![index].description,
+                                      },
+                                    );
+                                  },
+                                  contentPadding: EdgeInsets.only(top: index == 0 ? 15 : 10, left: 15, right: 15),
+                                  leading: Container(
+                                    height: 60,
+                                    width: 60,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage(caseController.caseModel!.data![index].doctor_image!),
                                       ),
                                     ),
-                                    SizedBox(height: height * 0.004),
-                                    Text(
-                                      "${caseController.caseModel!.data![index].case_id!}  |  ${caseController.caseModel!.data![index].case_time!} - ${caseController.caseModel!.data![index].case_date!}",
-                                      style: TextStyleConst.mediumTextStyle(
-                                        ColorConst.hintGreyColor,
-                                        width * 0.036,
-                                      ),
+                                  ),
+                                  title: Text(
+                                    caseController.caseModel!.data![index].doctor_name!,
+                                    style: TextStyleConst.mediumTextStyle(
+                                      ColorConst.blackColor,
+                                      width * 0.045,
                                     ),
-                                  ],
+                                  ),
+                                  subtitle: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: height * 0.002),
+                                      Text(
+                                        caseController.caseModel!.data![index].status!,
+                                        style: TextStyleConst.mediumTextStyle(
+                                          ColorConst.greenColor,
+                                          width * 0.035,
+                                        ),
+                                      ),
+                                      SizedBox(height: height * 0.004),
+                                      Text(
+                                        "${caseController.caseModel!.data![index].case_id!}  |  ${caseController.caseModel!.data![index].case_time!} - ${caseController.caseModel!.data![index].case_date!}",
+                                        style: TextStyleConst.mediumTextStyle(
+                                          ColorConst.hintGreyColor,
+                                          width * 0.036,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ),
                 )

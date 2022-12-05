@@ -44,6 +44,7 @@ class BillDetailsController extends GetxController {
     FlutterDownloader.registerCallback(downloadingCallback);
   }
 
+  @pragma('vm:entry-point')
   static downloadingCallback(id, status, progress) {
     SendPort? sendPort = IsolateNameServer.lookupPortByName("downloading");
     sendPort?.send([id, status, progress]);

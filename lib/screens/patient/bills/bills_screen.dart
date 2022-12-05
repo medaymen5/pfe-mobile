@@ -27,85 +27,91 @@ class BillScreen extends StatelessWidget {
               )
             : Container(
                 color: Colors.white,
-                child: AnimationLimiter(
-                  child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: billsController.billsModel!.data!.length,
-                    itemBuilder: (context, index) {
-                      return AnimationConfiguration.staggeredList(
-                        position: index,
-                        duration: const Duration(milliseconds: 1000),
-                        child: SlideAnimation(
-                          verticalOffset: 50.0,
-                          child: FadeInAnimation(
-                            child: GestureDetector(
-                              onTap: () {
-                                Get.to(
-                                  arguments: billsController.billsModel!.data![index].id!,
-                                  () => BillDetailScreen(),
-                                  transition: Transition.rightToLeft,
-                                );
-                              },
-                              child: Container(
-                                margin: EdgeInsets.only(left: 15, right: 15, top: index == 0 ? 15 : 5),
-                                height: 60,
-                                color: Colors.transparent,
-                                width: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          billsController.billsModel!.data![index].bill_id!,
-                                          style: TextStyleConst.boldTextStyle(
-                                            ColorConst.blueColor,
-                                            width * 0.045,
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    billsController.isGetBills.value = false;
+                    billsController.getBill();
+                  },
+                  child: AnimationLimiter(
+                    child: ListView.builder(
+                      physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+                      itemCount: billsController.billsModel!.data!.length,
+                      itemBuilder: (context, index) {
+                        return AnimationConfiguration.staggeredList(
+                          position: index,
+                          duration: const Duration(milliseconds: 1000),
+                          child: SlideAnimation(
+                            verticalOffset: 50.0,
+                            child: FadeInAnimation(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Get.to(
+                                    arguments: billsController.billsModel!.data![index].id!,
+                                    () => BillDetailScreen(),
+                                    transition: Transition.rightToLeft,
+                                  );
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(left: 15, right: 15, top: index == 0 ? 15 : 5),
+                                  height: 60,
+                                  color: Colors.transparent,
+                                  width: double.infinity,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            billsController.billsModel!.data![index].bill_id!,
+                                            style: TextStyleConst.boldTextStyle(
+                                              ColorConst.blueColor,
+                                              width * 0.045,
+                                            ),
+                                          ),
+                                          SizedBox(height: height * 0.002),
+                                          Text(
+                                            billsController.billsModel!.data![index].bill_date!,
+                                            style: TextStyleConst.mediumTextStyle(
+                                              ColorConst.hintGreyColor,
+                                              width * 0.037,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                                        height: 45,
+                                        decoration: BoxDecoration(
+                                          color: ColorConst.bgGreyColor,
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: Center(
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                billsController.billsModel!.data![index].currency!,
+                                                style: TextStyleConst.boldTextStyle(ColorConst.blackColor, width * 0.04),
+                                              ),
+                                              Text(
+                                                " ${billsController.billsModel!.data![index].amount!}",
+                                                style: TextStyleConst.boldTextStyle(ColorConst.blackColor, width * 0.04),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        SizedBox(height: height * 0.002),
-                                        Text(
-                                          billsController.billsModel!.data![index].bill_date!,
-                                          style: TextStyleConst.mediumTextStyle(
-                                            ColorConst.hintGreyColor,
-                                            width * 0.037,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                                      height: 45,
-                                      decoration: BoxDecoration(
-                                        color: ColorConst.bgGreyColor,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Center(
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              billsController.billsModel!.data![index].currency!,
-                                              style: TextStyleConst.boldTextStyle(ColorConst.blackColor, width * 0.04),
-                                            ),
-                                            Text(
-                                              " ${billsController.billsModel!.data![index].amount!}",
-                                              style: TextStyleConst.boldTextStyle(ColorConst.blackColor, width * 0.04),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ],
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
               )

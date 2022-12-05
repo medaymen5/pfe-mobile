@@ -13,11 +13,18 @@ class AdmissionController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    StringUtils.client.getAdmission(PreferenceUtils.getStringValue("token")).then((value) {
-      admissionModel = value;
-      isGetAdmission.value = true;
-    }).onError((DioError error, stackTrace) {
-      CheckSocketException.checkSocketException(error);
-    });
+    getAdmission();
+  }
+
+  void getAdmission() {
+    StringUtils.client.getAdmission(PreferenceUtils.getStringValue("token"))
+      ..then((value) {
+        admissionModel = value;
+        isGetAdmission.value = true;
+      })
+      ..onError((DioError error, stackTrace) {
+        CheckSocketException.checkSocketException(error);
+        return AdmissionModel();
+      });
   }
 }

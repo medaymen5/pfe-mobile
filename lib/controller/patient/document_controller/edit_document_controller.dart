@@ -71,6 +71,12 @@ class EditDocumentController extends GetxController {
       if (PreferenceUtils.getBoolValue("isDoctor")) {
         CommonLoader.showLoader();
 
+        print('''   ${PreferenceUtils.getStringValue("token")},
+          ${documentId.toString()},
+          ${titleController.text.trim()},
+          ${docTypeId ?? ""},
+          ${patientId ?? ""},
+          ${file.value!.path == "" ? null : File(file.value?.path ?? "")}  ''');
         StringUtils.client.updateDoctorsDocuments(
           PreferenceUtils.getStringValue("token"),
           documentId.toString(),
@@ -78,6 +84,7 @@ class EditDocumentController extends GetxController {
           docTypeId ?? "",
           patientId ?? "",
           file.value!.path == "" ? null : File(file.value?.path ?? ""),
+          notesController.text,
         )
           ..then((value) {
             Get.back();

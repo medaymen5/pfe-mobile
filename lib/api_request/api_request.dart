@@ -554,7 +554,8 @@ abstract class ApiClient {
     @Part(name: "title") String title,
     @Part(name: "document_type_id") String documentTypeId,
     @Part(name: "patient_id") String patientId,
-    @Part(name: "file") File? attachment,
+    @Part(name: "attachment") File? attachment,
+    @Part(name: "notes") String notes,
   );
 
   @MultiPart()
@@ -566,6 +567,7 @@ abstract class ApiClient {
     @Part(name: "document_type_id") String documentTypeId,
     @Part(name: "patient_id") String patientId,
     @Part(name: "file") File? attachment,
+    @Part(name: "notes") String notes,
   );
 
   @DELETE("doctors/doctor-document-delete/{id}")

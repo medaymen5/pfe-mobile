@@ -7,13 +7,15 @@ import 'package:infyhms_flutter/utils/string_utils.dart';
 
 class DoctorCaseDetailsController extends GetxController {
   DoctorCaseDetailsModel? doctorCaseDetailsModel;
-  RxBool isGodDetails = false.obs;
+  RxBool isGotDetails = false.obs;
   String caseId = Get.arguments;
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     getDoctorCaseDetails();
+    print(PreferenceUtils.getStringValue("token"));
+    print(caseId);
   }
 
   void getDoctorCaseDetails() {
@@ -21,11 +23,11 @@ class DoctorCaseDetailsController extends GetxController {
       ..then((value) {
         doctorCaseDetailsModel = value;
         if (doctorCaseDetailsModel!.success == true) {
-          isGodDetails.value = true;
+          isGotDetails.value = true;
         }
       })
       ..onError((DioError error, stackTrace) {
-        isGodDetails.value = true;
+        isGotDetails.value = true;
         CheckSocketException.checkSocketException(error);
         return DoctorCaseDetailsModel();
       });

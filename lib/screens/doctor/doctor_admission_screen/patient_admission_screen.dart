@@ -35,173 +35,179 @@ class PatientAdmission extends StatelessWidget {
                 )
               : Container(
                   color: ColorConst.whiteColor,
-                  child: AnimationLimiter(
-                    child: ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: patientAdmissionController.patientAdmissionModel!.data!.length,
-                        itemBuilder: (context, index) {
-                          return AnimationConfiguration.staggeredList(
-                            position: index,
-                            duration: const Duration(milliseconds: 1000),
-                            child: SlideAnimation(
-                              verticalOffset: 50.0,
-                              child: FadeInAnimation(
-                                child: Slidable(
-                                  endActionPane: ActionPane(
-                                    extentRatio: 0.25,
-                                    motion: const ScrollMotion(),
-                                    children: [
-                                      SlidableAction(
-                                        onPressed: (context) {
-                                          showDialog(
-                                            barrierDismissible: false,
-                                            context: context,
-                                            builder: (context) {
-                                              return Center(
-                                                child: Container(
-                                                  height: height / 2.7,
-                                                  width: width / 1.12,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(15),
-                                                    color: Colors.white,
-                                                  ),
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: [
-                                                      Container(
-                                                        height: 60,
-                                                        width: 60,
-                                                        decoration: const BoxDecoration(
-                                                          image: DecorationImage(
-                                                            image: AssetImage(ImageUtils.deleteIcon),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: height * 0.03),
-                                                      Text(
-                                                        "Delete",
-                                                        style: TextStyleConst.boldTextStyle(
-                                                          ColorConst.blackColor,
-                                                          width * 0.05,
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: height * 0.01),
-                                                      Text(
-                                                        "Are you sure want to delete this\n appointment?",
-                                                        textAlign: TextAlign.center,
-                                                        style: TextStyleConst.mediumTextStyle(
-                                                          ColorConst.hintGreyColor,
-                                                          width * 0.042,
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: height * 0.03),
-                                                      Row(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                        children: [
-                                                          CommonButton(
-                                                            textStyleConst: TextStyleConst.mediumTextStyle(
-                                                              ColorConst.whiteColor,
-                                                              width * 0.05,
-                                                            ),
-                                                            onTap: () {
-                                                              Get.back();
-                                                              patientAdmissionController.deleteAdmission(
-                                                                patientAdmissionController.patientAdmissionModel!.data![index].id!,
-                                                              );
-                                                            },
-                                                            color: ColorConst.blueColor,
-                                                            text: StringUtils.delete,
-                                                            width: width / 2.5,
-                                                            height: 50,
-                                                          ),
-                                                          CommonButton(
-                                                            textStyleConst: TextStyleConst.mediumTextStyle(
-                                                              ColorConst.hintGreyColor,
-                                                              width * 0.05,
-                                                            ),
-                                                            onTap: () {
-                                                              Get.back();
-                                                            },
-                                                            color: ColorConst.borderGreyColor,
-                                                            text: StringUtils.cancel,
-                                                            width: width / 2.5,
-                                                            height: 50,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                        backgroundColor: const Color(0xFFFCE5E5),
-                                        foregroundColor: ColorConst.redColor,
-                                        label: StringUtils.delete,
-                                      ),
-                                    ],
-                                  ),
-                                  child: ListTile(
-                                    onTap: () {
-                                      Get.to(
-                                        () => PatientAdmissionDetailsScreen(),
-                                        transition: Transition.rightToLeft,
-                                        arguments: patientAdmissionController.patientAdmissionModel!.data![index].id!,
-                                      );
-                                    },
-                                    contentPadding: EdgeInsets.only(top: index == 0 ? 10 : 0, right: 15, left: 15),
-                                    leading: Container(
-                                      height: 60,
-                                      width: 60,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: NetworkImage(patientAdmissionController.patientAdmissionModel!.data![index].patient_image!),
-                                        ),
-                                      ),
-                                    ),
-                                    title: Text(
-                                      patientAdmissionController.patientAdmissionModel!.data![index].patient_name!,
-                                      style: TextStyleConst.mediumTextStyle(
-                                        ColorConst.blackColor,
-                                        width * 0.045,
-                                      ),
-                                    ),
-                                    subtitle: Row(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      patientAdmissionController.isGotAdmission.value = false;
+                      patientAdmissionController.getPatientAdmission();
+                    },
+                    child: AnimationLimiter(
+                      child: ListView.builder(
+                          physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+                          itemCount: patientAdmissionController.patientAdmissionModel!.data!.length,
+                          itemBuilder: (context, index) {
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 1000),
+                              child: SlideAnimation(
+                                verticalOffset: 50.0,
+                                child: FadeInAnimation(
+                                  child: Slidable(
+                                    endActionPane: ActionPane(
+                                      extentRatio: 0.25,
+                                      motion: const ScrollMotion(),
                                       children: [
-                                        Text(
-                                          patientAdmissionController.patientAdmissionModel!.data![index].admission_id!,
-                                          style: TextStyleConst.mediumTextStyle(
-                                            ColorConst.hintGreyColor,
-                                            width * 0.036,
+                                        SlidableAction(
+                                          onPressed: (context) {
+                                            showDialog(
+                                              barrierDismissible: false,
+                                              context: context,
+                                              builder: (context) {
+                                                return Center(
+                                                  child: Container(
+                                                    height: height / 2.7,
+                                                    width: width / 1.12,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(15),
+                                                      color: Colors.white,
+                                                    ),
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Container(
+                                                          height: 60,
+                                                          width: 60,
+                                                          decoration: const BoxDecoration(
+                                                            image: DecorationImage(
+                                                              image: AssetImage(ImageUtils.deleteIcon),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: height * 0.03),
+                                                        Text(
+                                                          "Delete",
+                                                          style: TextStyleConst.boldTextStyle(
+                                                            ColorConst.blackColor,
+                                                            width * 0.05,
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: height * 0.01),
+                                                        Text(
+                                                          "Are you sure want to delete this\n appointment?",
+                                                          textAlign: TextAlign.center,
+                                                          style: TextStyleConst.mediumTextStyle(
+                                                            ColorConst.hintGreyColor,
+                                                            width * 0.042,
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: height * 0.03),
+                                                        Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                          children: [
+                                                            CommonButton(
+                                                              textStyleConst: TextStyleConst.mediumTextStyle(
+                                                                ColorConst.whiteColor,
+                                                                width * 0.05,
+                                                              ),
+                                                              onTap: () {
+                                                                Get.back();
+                                                                patientAdmissionController.deleteAdmission(
+                                                                  patientAdmissionController.patientAdmissionModel!.data![index].id!,
+                                                                );
+                                                              },
+                                                              color: ColorConst.blueColor,
+                                                              text: StringUtils.delete,
+                                                              width: width / 2.5,
+                                                              height: 50,
+                                                            ),
+                                                            CommonButton(
+                                                              textStyleConst: TextStyleConst.mediumTextStyle(
+                                                                ColorConst.hintGreyColor,
+                                                                width * 0.05,
+                                                              ),
+                                                              onTap: () {
+                                                                Get.back();
+                                                              },
+                                                              color: ColorConst.borderGreyColor,
+                                                              text: StringUtils.cancel,
+                                                              width: width / 2.5,
+                                                              height: 50,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                          backgroundColor: const Color(0xFFFCE5E5),
+                                          foregroundColor: ColorConst.redColor,
+                                          label: StringUtils.delete,
+                                        ),
+                                      ],
+                                    ),
+                                    child: ListTile(
+                                      onTap: () {
+                                        Get.to(
+                                          () => PatientAdmissionDetailsScreen(),
+                                          transition: Transition.rightToLeft,
+                                          arguments: patientAdmissionController.patientAdmissionModel!.data![index].id!,
+                                        );
+                                      },
+                                      contentPadding: EdgeInsets.only(top: index == 0 ? 10 : 0, right: 15, left: 15),
+                                      leading: Container(
+                                        height: 60,
+                                        width: 60,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: NetworkImage(patientAdmissionController.patientAdmissionModel!.data![index].patient_image!),
                                           ),
                                         ),
-                                        Text(
-                                          " | ",
-                                          style: TextStyleConst.mediumTextStyle(
-                                            ColorConst.primaryColor,
-                                            width * 0.036,
-                                          ),
+                                      ),
+                                      title: Text(
+                                        patientAdmissionController.patientAdmissionModel!.data![index].patient_name!,
+                                        style: TextStyleConst.mediumTextStyle(
+                                          ColorConst.blackColor,
+                                          width * 0.045,
                                         ),
-                                        Flexible(
-                                          child: Text(
-                                            "${patientAdmissionController.patientAdmissionModel!.data![index].admission_time!} ${patientAdmissionController.patientAdmissionModel!.data![index].admission_date!}",
+                                      ),
+                                      subtitle: Row(
+                                        children: [
+                                          Text(
+                                            patientAdmissionController.patientAdmissionModel!.data![index].admission_id!,
                                             style: TextStyleConst.mediumTextStyle(
                                               ColorConst.hintGreyColor,
                                               width * 0.036,
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                          Text(
+                                            " | ",
+                                            style: TextStyleConst.mediumTextStyle(
+                                              ColorConst.primaryColor,
+                                              width * 0.036,
+                                            ),
+                                          ),
+                                          Flexible(
+                                            child: Text(
+                                              "${patientAdmissionController.patientAdmissionModel!.data![index].admission_time!} ${patientAdmissionController.patientAdmissionModel!.data![index].admission_date!}",
+                                              style: TextStyleConst.mediumTextStyle(
+                                                ColorConst.hintGreyColor,
+                                                width * 0.036,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        }),
+                            );
+                          }),
+                    ),
                   ),
                 );
     });

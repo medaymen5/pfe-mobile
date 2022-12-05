@@ -11,12 +11,11 @@ import 'package:infyhms_flutter/utils/preference_utils.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   PreferenceUtils.init();
-  await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
+  await FlutterDownloader.initialize(ignoreSsl: true, debug: false);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FirebaseAnalytics.instance;
-  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (_) {
       runApp(const MyApp());
