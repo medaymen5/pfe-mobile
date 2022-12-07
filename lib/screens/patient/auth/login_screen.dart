@@ -59,7 +59,7 @@ class LoginScreen extends StatelessWidget {
                           color: ColorConst.bgGreyColor,
                         ),
                         Container(
-                          height: height / 1.60,
+                          height: height / 1.53,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: ColorConst.whiteColor,

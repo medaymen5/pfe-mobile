@@ -101,13 +101,7 @@ class ReportScreen extends StatelessWidget {
                                           ),
                                           child: ListTile(
                                             contentPadding: EdgeInsets.only(top: index == 0 ? 10 : 0, left: 10, right: 10),
-                                            onTap: () {
-                                              Get.to(
-                                                () => DoctorCaseDetailsScreen(),
-                                                transition: Transition.rightToLeft,
-                                                arguments: reportScreenController.commonReportModel!.data![index].case_id!,
-                                              );
-                                            },
+                                            onTap: () {},
                                             leading: Container(
                                               height: 60,
                                               width: 60,
