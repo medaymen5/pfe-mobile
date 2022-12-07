@@ -803,6 +803,33 @@ class _ApiClient implements ApiClient {
   }
 
   @override
+  Future<PrescriptionDetailsModel> getPrescriptionDetails(
+    token,
+    id,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{r'Authorization': token};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(_setStreamType<PrescriptionDetailsModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'patient-prescription/${id}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = PrescriptionDetailsModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<VaccinatedModel> getVaccinated(token) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -1011,6 +1038,42 @@ class _ApiClient implements ApiClient {
         )
         .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = GetProfileModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<SignUpModel> patientRegistration(
+    firstName,
+    lastName,
+    email,
+    gender,
+    password,
+    passwordConfirmation,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = {
+      'first_name': firstName,
+      'last_name': lastName,
+      'email': email,
+      'gender': gender,
+      'password': password,
+      'password_confirmation': passwordConfirmation,
+    };
+    final _result = await _dio.fetch<Map<String, dynamic>>(_setStreamType<SignUpModel>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'patient-register',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = SignUpModel.fromJson(_result.data!);
     return value;
   }
 
@@ -2150,19 +2213,19 @@ class _ApiClient implements ApiClient {
       'patient_id',
       patientId,
     ));
-    _data.fields.add(MapEntry(
-      'notes',
-      notes,
-    ));
     if (attachment != null) {
       _data.files.add(MapEntry(
-        'file',
+        'attachment',
         MultipartFile.fromFileSync(
           attachment.path,
           filename: attachment.path.split(Platform.pathSeparator).last,
         ),
       ));
     }
+    _data.fields.add(MapEntry(
+      'notes',
+      notes,
+    ));
     final _result = await _dio.fetch<Map<String, dynamic>>(_setStreamType<DoctorDocumentsCRUDModel>(Options(
       method: 'POST',
       headers: _headers,
@@ -2208,10 +2271,6 @@ class _ApiClient implements ApiClient {
       'patient_id',
       patientId,
     ));
-    _data.fields.add(MapEntry(
-      'notes',
-      notes,
-    ));
     if (attachment != null) {
       _data.files.add(MapEntry(
         'file',
@@ -2221,6 +2280,10 @@ class _ApiClient implements ApiClient {
         ),
       ));
     }
+    _data.fields.add(MapEntry(
+      'notes',
+      notes,
+    ));
     final _result = await _dio.fetch<Map<String, dynamic>>(_setStreamType<DoctorDocumentsCRUDModel>(Options(
       method: 'POST',
       headers: _headers,

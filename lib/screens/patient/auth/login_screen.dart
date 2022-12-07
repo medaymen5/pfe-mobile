@@ -6,6 +6,7 @@ import 'package:infyhms_flutter/constant/color_const.dart';
 import 'package:infyhms_flutter/constant/text_style_const.dart';
 import 'package:infyhms_flutter/controller/patient/auth_controller/login_controller.dart';
 import 'package:infyhms_flutter/screens/patient/auth/forgot_password_screen.dart';
+import 'package:infyhms_flutter/screens/patient/auth/sign_up_screen.dart';
 import 'package:infyhms_flutter/utils/image_utils.dart';
 import 'package:infyhms_flutter/utils/string_utils.dart';
 
@@ -24,7 +25,7 @@ class LoginScreen extends StatelessWidget {
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Scaffold(
-          backgroundColor: ColorConst.bgGreyColor,
+          backgroundColor: ColorConst.whiteColor,
           body: ListView(
             shrinkWrap: true,
             physics: const BouncingScrollPhysics(),
@@ -58,7 +59,7 @@ class LoginScreen extends StatelessWidget {
                           color: ColorConst.bgGreyColor,
                         ),
                         Container(
-                          height: height / 1.54,
+                          height: height / 1.60,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: ColorConst.whiteColor,
@@ -78,6 +79,7 @@ class LoginScreen extends StatelessWidget {
                           child: Padding(
                             padding: EdgeInsets.only(top: height * 0.06, left: 20, right: 20),
                             child: SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(),
                               child: Column(
                                 children: [
                                   /// SignIn
@@ -146,7 +148,31 @@ class LoginScreen extends StatelessWidget {
                                     width: width,
                                     height: 50,
                                   ),
-                                  SizedBox(height: height * 0.04)
+                                  SizedBox(height: height * 0.1),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "New here?",
+                                        style: TextStyleConst.mediumTextStyle(
+                                          ColorConst.hintGreyColor,
+                                          width * 0.035,
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          Get.to(() => SignUpScreen());
+                                        },
+                                        child: Text(
+                                          " Sign up",
+                                          style: TextStyleConst.mediumTextStyle(
+                                            ColorConst.blueColor,
+                                            width * 0.035,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),

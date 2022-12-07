@@ -121,26 +121,28 @@ class LiveConsultationsScreen extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                          trailing: GestureDetector(
-                                            onTap: () {
-                                              liveConsultationsController.getDoctorLiveMeeting(
-                                                liveConsultationsController.doctorLiveConsultationsModel!.data![index].id!,
-                                                context,
-                                                height,
-                                                width,
-                                              );
-                                            },
-                                            child: Container(
-                                              margin: const EdgeInsets.only(right: 10),
-                                              width: 30,
-                                              height: 30,
-                                              decoration: const BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: AssetImage(ImageUtils.videoIcon),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
+                                          trailing: liveConsultationsController.doctorLiveConsultationsModel!.data![index].status == "Awaited"
+                                              ? GestureDetector(
+                                                  onTap: () {
+                                                    liveConsultationsController.getDoctorLiveMeeting(
+                                                      liveConsultationsController.doctorLiveConsultationsModel!.data![index].id!,
+                                                      context,
+                                                      height,
+                                                      width,
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    margin: const EdgeInsets.only(right: 10),
+                                                    width: 30,
+                                                    height: 30,
+                                                    decoration: const BoxDecoration(
+                                                      image: DecorationImage(
+                                                        image: AssetImage(ImageUtils.videoIcon),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              : const SizedBox(),
                                           title: Text(
                                             liveConsultationsController.doctorLiveConsultationsModel?.data?[index].consultation_title ?? "",
                                             style: TextStyleConst.mediumTextStyle(
@@ -221,26 +223,28 @@ class LiveConsultationsScreen extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                          trailing: GestureDetector(
-                                            onTap: () {
-                                              liveConsultationsController.getLiveMeeting(
-                                                liveConsultationsController.liveConsultationFilter!.data![index].id!,
-                                                context,
-                                                height,
-                                                width,
-                                              );
-                                            },
-                                            child: Container(
-                                              margin: const EdgeInsets.only(right: 10),
-                                              width: 30,
-                                              height: 30,
-                                              decoration: const BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: AssetImage(ImageUtils.videoIcon),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
+                                          trailing: liveConsultationsController.liveConsultationFilter?.data?[index].status == "Awaited"
+                                              ? GestureDetector(
+                                                  onTap: () {
+                                                    liveConsultationsController.getLiveMeeting(
+                                                      liveConsultationsController.liveConsultationFilter!.data![index].id!,
+                                                      context,
+                                                      height,
+                                                      width,
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    margin: const EdgeInsets.only(right: 10),
+                                                    width: 30,
+                                                    height: 30,
+                                                    decoration: const BoxDecoration(
+                                                      image: DecorationImage(
+                                                        image: AssetImage(ImageUtils.videoIcon),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              : const SizedBox(),
                                           title: Text(
                                             liveConsultationsController.liveConsultationFilter?.data?[index].consultation_title ?? "",
                                             style: TextStyleConst.mediumTextStyle(

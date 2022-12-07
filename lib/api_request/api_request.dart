@@ -55,6 +55,7 @@ import 'package:infyhms_flutter/model/patient/auth_model/login_model.dart';
 import 'package:infyhms_flutter/model/patient/auth_model/logout_model.dart';
 import 'package:infyhms_flutter/model/patient/auth_model/reset_password_model.dart';
 import 'package:infyhms_flutter/model/patient/auth_model/send_token_model.dart';
+import 'package:infyhms_flutter/model/patient/auth_model/sigup_model.dart';
 import 'package:infyhms_flutter/model/patient/bills_model/bill_detail_model.dart';
 import 'package:infyhms_flutter/model/patient/bills_model/bill_model.dart';
 import 'package:infyhms_flutter/model/patient/case_model/case_model.dart';
@@ -72,6 +73,7 @@ import 'package:infyhms_flutter/model/patient/live_consultancy/live_consultation
 import 'package:infyhms_flutter/model/patient/live_consultancy/live_consultation_filter.dart';
 import 'package:infyhms_flutter/model/patient/live_consultancy/live_consultation_meeting_model.dart';
 import 'package:infyhms_flutter/model/patient/notice_board_model/notice_board.dart';
+import 'package:infyhms_flutter/model/patient/prescriptions_model/prescription_details_model.dart';
 import 'package:infyhms_flutter/model/patient/prescriptions_model/prescriptions_model.dart';
 import 'package:infyhms_flutter/model/patient/vaccinated_model/vaccinated_model.dart';
 import 'package:infyhms_flutter/utils/string_utils.dart';
@@ -251,6 +253,12 @@ abstract class ApiClient {
     @Header('Authorization') String? token,
   );
 
+  @GET("patient-prescription/{id}")
+  Future<PrescriptionDetailsModel> getPrescriptionDetails(
+    @Header('Authorization') String? token,
+    @Path("id") int id,
+  );
+
   @GET("vaccinated-patient")
   Future<VaccinatedModel> getVaccinated(
     @Header('Authorization') String? token,
@@ -294,6 +302,16 @@ abstract class ApiClient {
   @GET("get-profile")
   Future<GetProfileModel> getProfile(
     @Header('Authorization') String? token,
+  );
+
+  @POST("patient-register")
+  Future<SignUpModel> patientRegistration(
+    @Field("first_name") String firstName,
+    @Field("last_name") String lastName,
+    @Field("email") String email,
+    @Field("gender") String gender,
+    @Field("password") String password,
+    @Field("password_confirmation") String passwordConfirmation,
   );
 
   /// Doctor panel

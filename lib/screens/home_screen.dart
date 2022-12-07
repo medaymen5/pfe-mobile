@@ -107,7 +107,7 @@ class HomeScreen extends StatelessWidget {
                                   ? ListUtils.doctorDrawerList[index]["title"]
                                   : ListUtils.drawerList[index]["title"],
                               style: TextStyleConst.mediumTextStyle(
-                                ColorConst.blackColor,
+                                index == controller.currentDrawerIndex.value ? ColorConst.blueColor : ColorConst.blackColor,
                                 width * 0.04,
                               ),
                             ),

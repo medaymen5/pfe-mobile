@@ -58,7 +58,7 @@ class MyPayRollDetailsScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Payroll #${payrollDetailsController.payrollDetailsModel!.data!.payroll_id}",
+                                    "Payroll #${payrollDetailsController.payrollDetailsModel?.data?.payroll_id ?? "N/A"}",
                                     style: TextStyleConst.boldTextStyle(
                                       ColorConst.blackColor,
                                       width * 0.05,
@@ -66,7 +66,7 @@ class MyPayRollDetailsScreen extends StatelessWidget {
                                   ),
                                   SizedBox(height: height * 0.004),
                                   Text(
-                                    "${payrollDetailsController.payrollDetailsModel!.data!.month}  ${payrollDetailsController.payrollDetailsModel!.data!.year}",
+                                    "${payrollDetailsController.payrollDetailsModel?.data?.month ?? "N/A"}  ${payrollDetailsController.payrollDetailsModel?.data?.year ?? "N/A"}",
                                     style: TextStyleConst.mediumTextStyle(ColorConst.hintGreyColor, width * 0.037),
                                   ),
                                 ],
@@ -82,7 +82,7 @@ class MyPayRollDetailsScreen extends StatelessWidget {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          payrollDetailsController.payrollDetailsModel!.data!.status!,
+                                          payrollDetailsController.payrollDetailsModel?.data?.status ?? "N/A",
                                           style: TextStyleConst.mediumTextStyle(
                                             ColorConst.greenColor,
                                             width * 0.035,
@@ -99,7 +99,7 @@ class MyPayRollDetailsScreen extends StatelessWidget {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          payrollDetailsController.payrollDetailsModel!.data!.status!,
+                                          payrollDetailsController.payrollDetailsModel?.data?.status ?? "N/A",
                                           style: TextStyleConst.mediumTextStyle(
                                             Colors.red,
                                             width * 0.035,
@@ -120,7 +120,7 @@ class MyPayRollDetailsScreen extends StatelessWidget {
                           CommonDetailText(
                             width: width,
                             titleText: StringUtils.srNo,
-                            descriptionText: "${payrollDetailsController.payrollDetailsModel!.data!.sr_no}",
+                            descriptionText: "${payrollDetailsController.payrollDetailsModel?.data?.sr_no ?? "N/A"}",
                           ),
                           SizedBox(height: height * 0.015),
 
@@ -128,7 +128,7 @@ class MyPayRollDetailsScreen extends StatelessWidget {
                           CommonDetailText(
                             width: width,
                             titleText: StringUtils.createOn,
-                            descriptionText: "${payrollDetailsController.payrollDetailsModel!.data!.created_on}",
+                            descriptionText: payrollDetailsController.payrollDetailsModel?.data?.created_on ?? "N/A",
                           ),
                           SizedBox(height: height * 0.02),
                           Container(
@@ -174,7 +174,7 @@ class MyPayRollDetailsScreen extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        "${payrollDetailsController.payrollDetailsModel!.data!.currency_symbol} ${payrollDetailsController.payrollDetailsModel!.data!.basic_salary}",
+                                        "${payrollDetailsController.payrollDetailsModel?.data?.currency_symbol ?? "N/A"} ${payrollDetailsController.payrollDetailsModel?.data?.basic_salary ?? "N/A"}",
                                         style: TextStyleConst.mediumTextStyle(
                                           ColorConst.blackColor,
                                           width * 0.045,
@@ -198,7 +198,7 @@ class MyPayRollDetailsScreen extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        "${payrollDetailsController.payrollDetailsModel!.data!.currency_symbol} ${payrollDetailsController.payrollDetailsModel!.data!.allowance}",
+                                        "${payrollDetailsController.payrollDetailsModel?.data?.currency_symbol ?? "N/A"} ${payrollDetailsController.payrollDetailsModel?.data?.allowance ?? "N/A"}",
                                         style: TextStyleConst.mediumTextStyle(
                                           ColorConst.blackColor,
                                           width * 0.045,
@@ -222,7 +222,7 @@ class MyPayRollDetailsScreen extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        "${payrollDetailsController.payrollDetailsModel!.data!.currency_symbol} ${payrollDetailsController.payrollDetailsModel!.data!.deductions}",
+                                        "${payrollDetailsController.payrollDetailsModel?.data?.currency_symbol ?? "N/A"} ${payrollDetailsController.payrollDetailsModel?.data?.deductions ?? "N/A"}",
                                         style: TextStyleConst.mediumTextStyle(
                                           ColorConst.orangeColor,
                                           width * 0.045,
@@ -255,7 +255,7 @@ class MyPayRollDetailsScreen extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        "${payrollDetailsController.payrollDetailsModel!.data!.currency_symbol} ${payrollDetailsController.payrollDetailsModel!.data!.net_salary}",
+                                        "${payrollDetailsController.payrollDetailsModel?.data?.currency_symbol ?? "N/A"} ${payrollDetailsController.payrollDetailsModel?.data?.net_salary ?? "N/A"}",
                                         style: TextStyleConst.boldTextStyle(
                                           ColorConst.blackColor,
                                           width * 0.045,

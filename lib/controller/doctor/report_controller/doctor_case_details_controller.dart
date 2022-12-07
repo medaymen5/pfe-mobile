@@ -14,8 +14,6 @@ class DoctorCaseDetailsController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     getDoctorCaseDetails();
-    print(PreferenceUtils.getStringValue("token"));
-    print(caseId);
   }
 
   void getDoctorCaseDetails() {
