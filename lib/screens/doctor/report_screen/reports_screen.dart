@@ -143,6 +143,7 @@ class ReportScreen extends StatelessWidget {
                                                       ColorConst.hintGreyColor,
                                                       width * 0.036,
                                                     ),
+                                                    maxLines: 1,
                                                   ),
                                                 ),
                                               ],
