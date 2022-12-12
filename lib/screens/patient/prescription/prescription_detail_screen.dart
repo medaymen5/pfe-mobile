@@ -20,6 +20,7 @@ class PrescriptionsDetailScreen extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
+          backgroundColor: Colors.white,
           appBar: CommonAppBar(
             title: "Prescriptions Details",
             leadOnTap: () {
@@ -164,9 +165,7 @@ class PrescriptionsDetailScreen extends StatelessWidget {
                                                         ),
                                                         SizedBox(height: height * 0.003),
                                                         Text(
-                                                          prescriptionDetailsController
-                                                                  .prescriptionDetailsModel?.data?.medicine?[index].salt_composition ??
-                                                              "N/A",
+                                                          "${prescriptionDetailsController.prescriptionDetailsModel?.data?.medicine?[index].dosage ?? "N/A"}(${prescriptionDetailsController.prescriptionDetailsModel?.data?.medicine?[index].time ?? "N/A"})",
                                                           style: TextStyleConst.mediumTextStyle(
                                                             ColorConst.hintGreyColor,
                                                             width * 0.04,
@@ -176,8 +175,7 @@ class PrescriptionsDetailScreen extends StatelessWidget {
                                                       ],
                                                     ),
                                                     Text(
-                                                      prescriptionDetailsController.prescriptionDetailsModel?.data?.medicine![index].created_at ??
-                                                          "N/A",
+                                                      prescriptionDetailsController.prescriptionDetailsModel?.data?.medicine![index].days ?? "N/A",
                                                       style: TextStyleConst.mediumTextStyle(
                                                         ColorConst.blackColor,
                                                         width * 0.045,

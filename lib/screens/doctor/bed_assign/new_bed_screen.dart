@@ -12,7 +12,8 @@ import 'package:infyhms_flutter/controller/doctor/bed_assign_controller/new_bed_
 import 'package:infyhms_flutter/utils/string_utils.dart';
 
 class NewBedScreen extends StatelessWidget {
-  NewBedScreen({Key? key}) : super(key: key);
+  final String? bedId;
+  NewBedScreen({Key? key, this.bedId}) : super(key: key);
   final NewBedController newBedController = Get.put(NewBedController());
 
   @override
@@ -95,6 +96,7 @@ class NewBedScreen extends StatelessWidget {
                               onChange: (value) {
                                 newBedController.bedId = value ?? "";
                               },
+                              value: bedId,
                               dropdownItems: newBedController.bedsModel?.data?.map((value) {
                                     return DropdownMenuItem<String>(
                                       value: value.id.toString(),

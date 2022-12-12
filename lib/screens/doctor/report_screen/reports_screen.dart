@@ -80,7 +80,7 @@ class ReportScreen extends StatelessWidget {
                                                     width: width,
                                                     image: ImageUtils.deleteIcon,
                                                     title: "Delete",
-                                                    description: "Are you sure want to delete this\nappointment?",
+                                                    description: "Are you sure want to delete this\nreport?",
                                                     leftText: StringUtils.delete,
                                                     rightText: StringUtils.cancel,
                                                     leftTapEvent: () {
@@ -146,6 +146,25 @@ class ReportScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                               ],
+                                            ),
+                                            trailing: Obx(
+                                              () => reportScreenController.isCurrentDownloading[index].value
+                                                  ? const CircularProgressIndicator(color: ColorConst.primaryColor)
+                                                  : InkWell(
+                                                      onTap: () {
+                                                        reportScreenController.downloadDocument(context, index);
+                                                      },
+                                                      child: Container(
+                                                        margin: const EdgeInsets.only(right: 10),
+                                                        width: 25,
+                                                        height: 25,
+                                                        decoration: const BoxDecoration(
+                                                          image: DecorationImage(
+                                                            image: AssetImage(ImageUtils.downloadIcon),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
                                             ),
                                           ),
                                         ),
@@ -233,7 +252,7 @@ class ReportScreen extends StatelessWidget {
                                                               ),
                                                               SizedBox(height: height * 0.01),
                                                               Text(
-                                                                "Are you sure want to delete this\n appointment?",
+                                                                "Are you sure want to delete this\nreport?",
                                                                 textAlign: TextAlign.center,
                                                                 style: TextStyleConst.mediumTextStyle(
                                                                   ColorConst.hintGreyColor,

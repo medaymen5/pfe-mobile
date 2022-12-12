@@ -65,12 +65,14 @@ Map<String, dynamic> _$DoctorPrescriptionDetailDataToJson(
 
 Medicine _$MedicineFromJson(Map<String, dynamic> json) => Medicine(
       name: json['name'] as String?,
-      salt_composition: json['salt_composition'] as String?,
-      created_at: json['created_at'] as String?,
+      dosage: json['dosage'] as String?,
+      time: json['time'] as String?,
+      days: json['days'] as String?,
     );
 
 Map<String, dynamic> _$MedicineToJson(Medicine instance) => <String, dynamic>{
       'name': instance.name,
-      'salt_composition': instance.salt_composition,
-      'created_at': instance.created_at,
+      'dosage': instance.dosage,
+      'days': instance.days,
+      'time': instance.time,
     };

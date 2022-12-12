@@ -196,8 +196,7 @@ class DoctorPrescriptionDetailScreen extends StatelessWidget {
                                                         ),
                                                         SizedBox(height: height * 0.003),
                                                         Text(
-                                                          doctorPrescriptionDetailController
-                                                              .doctorPrescriptionDetailModel!.data!.medicine![index].salt_composition!,
+                                                          "${doctorPrescriptionDetailController.doctorPrescriptionDetailModel!.data!.medicine![index].dosage!}(${doctorPrescriptionDetailController.doctorPrescriptionDetailModel!.data!.medicine![index].time!})",
                                                           style: TextStyleConst.mediumTextStyle(
                                                             ColorConst.hintGreyColor,
                                                             width * 0.04,
@@ -207,8 +206,7 @@ class DoctorPrescriptionDetailScreen extends StatelessWidget {
                                                       ],
                                                     ),
                                                     Text(
-                                                      doctorPrescriptionDetailController
-                                                          .doctorPrescriptionDetailModel!.data!.medicine![index].created_at!,
+                                                      doctorPrescriptionDetailController.doctorPrescriptionDetailModel!.data!.medicine![index].days!,
                                                       style: TextStyleConst.mediumTextStyle(
                                                         ColorConst.blackColor,
                                                         width * 0.045,

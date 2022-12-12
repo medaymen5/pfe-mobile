@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:infyhms_flutter/component/common_detail_text.dart';
 import 'package:infyhms_flutter/component/common_socket_exception.dart';
+import 'package:infyhms_flutter/constant/color_const.dart';
+import 'package:infyhms_flutter/constant/text_style_const.dart';
 import 'package:infyhms_flutter/model/doctor/bed_status_model/bed_status_details_model.dart';
 import 'package:infyhms_flutter/model/doctor/bed_status_model/bed_status_model.dart';
 import 'package:infyhms_flutter/utils/preference_utils.dart';
@@ -76,32 +78,42 @@ class BedStatusController extends GetxController {
           child: Obx(() {
             return isStatusDataApiCalled.value == false
                 ? const Center(child: CircularProgressIndicator())
-                : SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: Container(
-                            height: 5,
-                            width: 60,
-                            decoration: BoxDecoration(color: const Color(0xffE7E9EB), borderRadius: BorderRadius.circular(5)),
+                : bedStatusDetailsModel!.data == null
+                    ? Center(
+                        child: Text(
+                          "No data found",
+                          style: TextStyleConst.mediumTextStyle(
+                            ColorConst.blackColor,
+                            width * 0.04,
                           ),
                         ),
-                        const SizedBox(height: 40),
-                        CommonDetailText(width: width, titleText: "Bed Name:", descriptionText: bedStatusDetailsModel?.data?.bed_name ?? ""),
-                        const SizedBox(height: 15),
-                        CommonDetailText(width: width, titleText: "Patient:", descriptionText: bedStatusDetailsModel?.data?.patient ?? ""),
-                        const SizedBox(height: 15),
-                        CommonDetailText(width: width, titleText: "Phone:", descriptionText: bedStatusDetailsModel?.data?.phone ?? ""),
-                        const SizedBox(height: 15),
-                        CommonDetailText(
-                            width: width, titleText: "Admission Date:", descriptionText: bedStatusDetailsModel?.data?.admission_date ?? ""),
-                        const SizedBox(height: 15),
-                        CommonDetailText(width: width, titleText: "Gender:", descriptionText: bedStatusDetailsModel?.data?.gender ?? ""),
-                        const SizedBox(height: 15),
-                      ],
-                    ),
-                  );
+                      )
+                    : SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: Container(
+                                height: 5,
+                                width: 60,
+                                decoration: BoxDecoration(color: const Color(0xffE7E9EB), borderRadius: BorderRadius.circular(5)),
+                              ),
+                            ),
+                            const SizedBox(height: 40),
+                            CommonDetailText(width: width, titleText: "Bed Name:", descriptionText: bedStatusDetailsModel?.data?.bed_name ?? ""),
+                            const SizedBox(height: 15),
+                            CommonDetailText(width: width, titleText: "Patient:", descriptionText: bedStatusDetailsModel?.data?.patient ?? ""),
+                            const SizedBox(height: 15),
+                            CommonDetailText(width: width, titleText: "Phone:", descriptionText: bedStatusDetailsModel?.data?.phone ?? ""),
+                            const SizedBox(height: 15),
+                            CommonDetailText(
+                                width: width, titleText: "Admission Date:", descriptionText: bedStatusDetailsModel?.data?.admission_date ?? ""),
+                            const SizedBox(height: 15),
+                            CommonDetailText(width: width, titleText: "Gender:", descriptionText: bedStatusDetailsModel?.data?.gender ?? ""),
+                            const SizedBox(height: 15),
+                          ],
+                        ),
+                      );
           }),
         );
       },

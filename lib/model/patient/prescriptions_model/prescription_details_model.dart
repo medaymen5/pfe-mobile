@@ -47,15 +47,16 @@ class PrescriptionsDetailsData {
 @JsonSerializable(explicitToJson: true)
 class Medicine {
   String? name;
-  String? salt_composition;
-  String? created_at;
+  String? dosage;
+  String? days;
+  String? time;
 
   Medicine({
     this.name,
-    this.salt_composition,
-    this.created_at,
+    this.dosage,
+    this.time,
+    this.days,
   });
-
   factory Medicine.fromJson(Map<String, dynamic> json) => _$MedicineFromJson(json);
 
   Map<String, dynamic> toJson() => _$MedicineToJson(this);

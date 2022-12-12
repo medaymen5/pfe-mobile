@@ -81,7 +81,7 @@ class SignUpScreen extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  /// SignIn
+                                  /// Sign up
                                   Center(
                                     child: Text(
                                       StringUtils.patientRegistration,
@@ -93,7 +93,7 @@ class SignUpScreen extends StatelessWidget {
                                   ),
                                   SizedBox(height: height * 0.03),
 
-                                  /// Email TextField
+                                  /// First Name TextField
                                   CommonTextField(
                                     controller: signUpController.firstController,
                                     keyBoardType: TextInputType.emailAddress,
@@ -103,6 +103,8 @@ class SignUpScreen extends StatelessWidget {
                                     hintText: "Enter First Name",
                                   ),
                                   SizedBox(height: height * 0.02),
+
+                                  /// Last Name TextField
                                   CommonTextField(
                                     controller: signUpController.lastController,
                                     keyBoardType: TextInputType.emailAddress,
@@ -112,6 +114,8 @@ class SignUpScreen extends StatelessWidget {
                                     hintText: "Enter Last Name",
                                   ),
                                   SizedBox(height: height * 0.02),
+
+                                  /// Email TextField
                                   CommonTextField(
                                     controller: signUpController.emailController,
                                     keyBoardType: TextInputType.emailAddress,
@@ -121,22 +125,50 @@ class SignUpScreen extends StatelessWidget {
                                     hintText: "Enter Email Address",
                                   ),
                                   SizedBox(height: height * 0.02),
-                                  CommonTextField(
-                                    controller: signUpController.passwordController,
-                                    keyBoardType: TextInputType.emailAddress,
-                                    validator: (value) {
-                                      return null;
-                                    },
-                                    hintText: "Enter Password",
+
+                                  /// Password TextField
+                                  Obx(
+                                    () => CommonTextField(
+                                      obscureText: !signUpController.showPassword.value,
+                                      suffixIcon: InkWell(
+                                        onTap: () {
+                                          signUpController.showPassword.value = !signUpController.showPassword.value;
+                                        },
+                                        child: !signUpController.showPassword.value
+                                            ? const Icon(Icons.visibility_off_outlined, color: Colors.black)
+                                            : const Icon(Icons.visibility, color: Colors.black),
+                                      ),
+                                      controller: signUpController.passwordController,
+                                      maxLine: 1,
+                                      keyBoardType: TextInputType.emailAddress,
+                                      validator: (value) {
+                                        return null;
+                                      },
+                                      hintText: "Enter Password",
+                                    ),
                                   ),
                                   SizedBox(height: height * 0.02),
-                                  CommonTextField(
-                                    controller: signUpController.confirmPasswordController,
-                                    keyBoardType: TextInputType.emailAddress,
-                                    validator: (value) {
-                                      return null;
-                                    },
-                                    hintText: "Re-enter Password",
+
+                                  /// Confirm password TextField
+                                  Obx(
+                                    () => CommonTextField(
+                                      obscureText: !signUpController.showConfirmPassword.value,
+                                      suffixIcon: InkWell(
+                                        onTap: () {
+                                          signUpController.showConfirmPassword.value = !signUpController.showConfirmPassword.value;
+                                        },
+                                        child: !signUpController.showConfirmPassword.value
+                                            ? const Icon(Icons.visibility_off_outlined, color: Colors.black)
+                                            : const Icon(Icons.visibility, color: Colors.black),
+                                      ),
+                                      controller: signUpController.confirmPasswordController,
+                                      keyBoardType: TextInputType.emailAddress,
+                                      validator: (value) {
+                                        return null;
+                                      },
+                                      maxLine: 1,
+                                      hintText: "Re-enter Password",
+                                    ),
                                   ),
                                   SizedBox(height: height * 0.02),
 
@@ -245,7 +277,7 @@ class SignUpScreen extends StatelessWidget {
 
                                   SizedBox(height: height * 0.07),
 
-                                  /// Login button
+                                  /// Submit button
                                   CommonButton(
                                     textStyleConst: TextStyleConst.mediumTextStyle(ColorConst.whiteColor, width * 0.05),
                                     onTap: () {
@@ -257,6 +289,8 @@ class SignUpScreen extends StatelessWidget {
                                     height: 50,
                                   ),
                                   SizedBox(height: height * 0.02),
+
+                                  /// Sign in text
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [

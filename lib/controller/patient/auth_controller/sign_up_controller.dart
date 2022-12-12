@@ -16,6 +16,9 @@ class SignUpController extends GetxController {
 
   RxInt currentIndex = 0.obs;
 
+  RxBool showPassword = false.obs;
+  RxBool showConfirmPassword = false.obs;
+
   SignUpModel? signUpModel;
 
   void registerUser() {
@@ -37,7 +40,7 @@ class SignUpController extends GetxController {
     } else if (confirmPasswordController.text.trim().isEmpty) {
       DisplaySnackBar.displaySnackBar("Please enter confirm password");
     } else if (passwordController.text.trim() != confirmPasswordController.text.trim()) {
-      DisplaySnackBar.displaySnackBar("Password doesn't match");
+      DisplaySnackBar.displaySnackBar("Password and confirm password does not match");
     } else {
       CommonLoader.showLoader();
       StringUtils.client.patientRegistration(

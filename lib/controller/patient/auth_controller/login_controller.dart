@@ -23,10 +23,15 @@ class LogInController extends GetxController {
   }
 
   void loginPatient(BuildContext context) {
-    if (emailController.text.isEmpty) {
+    String pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regExp = RegExp(pattern);
+    if (emailController.text.trim().isEmpty) {
       DisplaySnackBar.displaySnackBar("Please enter email");
-    } else if (emailController.text.isEmpty) {
+    } else if (passwordController.text.trim().isEmpty) {
       DisplaySnackBar.displaySnackBar("Please enter password");
+    } else if (!regExp.hasMatch(emailController.text)) {
+      DisplaySnackBar.displaySnackBar("Please enter valid email");
     } else {
       CommonLoader.showLoader();
       StringUtils.client.loginPatient({

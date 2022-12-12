@@ -41,44 +41,47 @@ class DoctorCaseDetailsScreen extends StatelessWidget {
                     )
                   : Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Column(
-                        children: [
-                          SizedBox(height: height * 0.02),
-                          CommonDetailText(
-                              width: width,
-                              titleText: "Case Id:",
-                              descriptionText: caseDetailsController.doctorCaseDetailsModel?.data?.case_id ?? ""),
-                          SizedBox(height: height * 0.015),
-                          CommonDetailText(
-                              width: width,
-                              titleText: "Case Date:",
-                              descriptionText: caseDetailsController.doctorCaseDetailsModel?.data?.case_date ?? ""),
-                          SizedBox(height: height * 0.015),
-                          CommonDetailText(
-                              width: width,
-                              titleText: "Patient:",
-                              descriptionText: caseDetailsController.doctorCaseDetailsModel?.data?.patient ?? ""),
-                          SizedBox(height: height * 0.015),
-                          CommonDetailText(
-                              width: width, titleText: "Phone:", descriptionText: caseDetailsController.doctorCaseDetailsModel?.data?.phone ?? ""),
-                          SizedBox(height: height * 0.015),
-                          CommonDetailText(
-                              width: width,
-                              titleText: "Fee:",
-                              descriptionText:
-                                  "${caseDetailsController.doctorCaseDetailsModel?.data?.currency ?? ""} ${caseDetailsController.doctorCaseDetailsModel?.data?.fee ?? ""}"),
-                          SizedBox(height: height * 0.015),
-                          CommonDetailText(
-                              width: width,
-                              titleText: "Created On:",
-                              descriptionText: caseDetailsController.doctorCaseDetailsModel?.data?.created_on ?? ""),
-                          SizedBox(height: height * 0.015),
-                          CommonDetailText(
-                              width: width,
-                              titleText: "Description:",
-                              descriptionText: caseDetailsController.doctorCaseDetailsModel?.data?.description ?? ""),
-                          SizedBox(height: height * 0.015),
-                        ],
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Column(
+                          children: [
+                            SizedBox(height: height * 0.02),
+                            CommonDetailText(
+                                width: width,
+                                titleText: "Case Id:",
+                                descriptionText: caseDetailsController.doctorCaseDetailsModel?.data?.case_id ?? ""),
+                            SizedBox(height: height * 0.015),
+                            CommonDetailText(
+                                width: width,
+                                titleText: "Case Date:",
+                                descriptionText: caseDetailsController.doctorCaseDetailsModel?.data?.case_date ?? ""),
+                            SizedBox(height: height * 0.015),
+                            CommonDetailText(
+                                width: width,
+                                titleText: "Patient:",
+                                descriptionText: caseDetailsController.doctorCaseDetailsModel?.data?.patient ?? ""),
+                            SizedBox(height: height * 0.015),
+                            CommonDetailText(
+                                width: width, titleText: "Phone:", descriptionText: caseDetailsController.doctorCaseDetailsModel?.data?.phone ?? ""),
+                            SizedBox(height: height * 0.015),
+                            CommonDetailText(
+                                width: width,
+                                titleText: "Fee:",
+                                descriptionText:
+                                    "${caseDetailsController.doctorCaseDetailsModel?.data?.currency ?? ""} ${caseDetailsController.doctorCaseDetailsModel?.data?.fee ?? ""}"),
+                            SizedBox(height: height * 0.015),
+                            CommonDetailText(
+                                width: width,
+                                titleText: "Created On:",
+                                descriptionText: caseDetailsController.doctorCaseDetailsModel?.data?.created_on ?? ""),
+                            SizedBox(height: height * 0.015),
+                            CommonDetailText(
+                                width: width,
+                                titleText: "Description:",
+                                descriptionText: caseDetailsController.doctorCaseDetailsModel?.data?.description ?? ""),
+                            SizedBox(height: height * 0.015),
+                          ],
+                        ),
                       ),
                     ),
         ),

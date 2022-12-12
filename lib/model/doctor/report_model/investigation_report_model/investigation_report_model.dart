@@ -27,6 +27,7 @@ class InvestigationReportData {
   String? title;
   String? date;
   String? time;
+  String? attachment;
 
   InvestigationReportData({
     this.id,
@@ -35,6 +36,7 @@ class InvestigationReportData {
     this.title,
     this.date,
     this.time,
+    this.attachment,
   });
   factory InvestigationReportData.fromJson(Map<String, dynamic> json) => _$InvestigationReportDataFromJson(json);
 

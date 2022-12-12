@@ -41,75 +41,83 @@ class BedStatusScreen extends StatelessWidget {
                             child: SlideAnimation(
                               verticalOffset: 50.0,
                               child: FadeInAnimation(
-                                child: Column(
-                                  children: [
-                                    const SizedBox(height: 15),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        CommonText(
-                                          text: bedStatusController.bedStatusModel?.data?[mainIndex].bed_title ?? "",
-                                          width: width,
-                                        ),
-                                        IconButton(
-                                          onPressed: () {
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: mainIndex == 0 ? 15 : 0),
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      InkWell(
+                                          onTap: () {
                                             bedStatusController.changeIcon(mainIndex);
                                           },
-                                          icon: Obx(() {
-                                            return RotatedBox(
-                                              quarterTurns: bedStatusController.turns[mainIndex].value,
-                                              child: Image.asset(
-                                                ImageUtils.dropDownIcon,
-                                                width: 16,
-                                                height: 8,
-                                              ),
-                                            );
-                                          }),
-                                        ),
-                                      ],
-                                    ),
-                                    Obx(() {
-                                      return Visibility(
-                                        visible: bedStatusController.showData[mainIndex].value,
-                                        child: Column(
-                                          children: List.generate(
-                                            bedStatusController.bedStatusModel?.data?[mainIndex].bed?.length ?? 0,
-                                            (subIndex) {
-                                              return ListTile(
-                                                onTap: () {
-                                                  if (bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].status == false) {
-                                                    CommonLoader.showLoader();
-                                                    bedStatusController.getBedDetails(
-                                                      "${bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].id}",
-                                                      context,
-                                                      height,
-                                                      width,
-                                                    );
-                                                  } else {
-                                                    Get.to(() => NewBedScreen());
-                                                  }
-                                                },
-                                                title: Text(
-                                                  bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].name ?? "",
-                                                  style: TextStyleConst.mediumTextStyle(Colors.black, 18),
+                                          child: Obx(
+                                            () => Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                CommonText(
+                                                  text: bedStatusController.bedStatusModel?.data?[mainIndex].bed_title ?? "",
+                                                  width: width,
                                                 ),
-                                                leading: Image.asset(
-                                                  bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].status ?? false
-                                                      ? ImageUtils.bedStatusGreen
-                                                      : ImageUtils.bedStatusRed,
-                                                  height: 22,
-                                                  width: 30,
+                                                RotatedBox(
+                                                  quarterTurns: bedStatusController.turns[mainIndex].value,
+                                                  child: Image.asset(
+                                                    ImageUtils.dropDownIcon,
+                                                    width: 16,
+                                                    height: 8,
+                                                  ),
                                                 ),
-                                              );
-                                            },
+                                              ],
+                                            ),
+                                          )),
+                                      Obx(() {
+                                        return Visibility(
+                                          visible: bedStatusController.showData[mainIndex].value,
+                                          child: Column(
+                                            children: List.generate(
+                                              bedStatusController.bedStatusModel?.data?[mainIndex].bed?.length ?? 0,
+                                              (subIndex) {
+                                                return ListTile(
+                                                  onTap: () {
+                                                    if (bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].status == false) {
+                                                      CommonLoader.showLoader();
+                                                      bedStatusController.getBedDetails(
+                                                        "${bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].id}",
+                                                        context,
+                                                        height,
+                                                        width,
+                                                      );
+                                                    } else {
+                                                      Get.to(
+                                                        () => NewBedScreen(
+                                                            bedId: bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].id == null
+                                                                ? null
+                                                                : "${bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].id}"),
+                                                      );
+                                                    }
+                                                  },
+                                                  title: Text(
+                                                    bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].name ?? "N/A",
+                                                    style: TextStyleConst.mediumTextStyle(Colors.black, 18),
+                                                  ),
+                                                  leading: Image.asset(
+                                                    bedStatusController.bedStatusModel?.data?[mainIndex].bed?[subIndex].status ?? false
+                                                        ? ImageUtils.bedStatusGreen
+                                                        : ImageUtils.bedStatusRed,
+                                                    height: 22,
+                                                    width: 30,
+                                                  ),
+                                                );
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    }),
-                                    const Divider(
-                                      color: ColorConst.borderGreyColor,
-                                    ),
-                                  ],
+                                        );
+                                      }),
+                                      const SizedBox(height: 10),
+                                      const Divider(
+                                        color: ColorConst.borderGreyColor,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
