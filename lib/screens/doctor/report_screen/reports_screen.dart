@@ -151,21 +151,23 @@ class ReportScreen extends StatelessWidget {
                                             trailing: Obx(
                                               () => reportScreenController.isCurrentDownloading[index].value
                                                   ? const CircularProgressIndicator(color: ColorConst.primaryColor)
-                                                  : InkWell(
-                                                      onTap: () {
-                                                        reportScreenController.downloadDocument(context, index);
-                                                      },
-                                                      child: Container(
-                                                        margin: const EdgeInsets.only(right: 10),
-                                                        width: 25,
-                                                        height: 25,
-                                                        decoration: const BoxDecoration(
-                                                          image: DecorationImage(
-                                                            image: AssetImage(ImageUtils.downloadIcon),
+                                                  : reportScreenController.investigationReportModel!.data![index].attachment == null
+                                                      ? const SizedBox()
+                                                      : InkWell(
+                                                          onTap: () {
+                                                            reportScreenController.downloadDocument(context, index);
+                                                          },
+                                                          child: Container(
+                                                            margin: const EdgeInsets.only(right: 10),
+                                                            width: 25,
+                                                            height: 25,
+                                                            decoration: const BoxDecoration(
+                                                              image: DecorationImage(
+                                                                image: AssetImage(ImageUtils.downloadIcon),
+                                                              ),
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ),
                                             ),
                                           ),
                                         ),

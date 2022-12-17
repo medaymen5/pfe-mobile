@@ -164,11 +164,14 @@ class PrescriptionsDetailScreen extends StatelessWidget {
                                                           ),
                                                         ),
                                                         SizedBox(height: height * 0.003),
-                                                        Text(
-                                                          "${prescriptionDetailsController.prescriptionDetailsModel?.data?.medicine?[index].dosage ?? "N/A"}(${prescriptionDetailsController.prescriptionDetailsModel?.data?.medicine?[index].time ?? "N/A"})",
-                                                          style: TextStyleConst.mediumTextStyle(
-                                                            ColorConst.hintGreyColor,
-                                                            width * 0.04,
+                                                        SizedBox(
+                                                          width: width * 0.60,
+                                                          child: Text(
+                                                            "${prescriptionDetailsController.prescriptionDetailsModel?.data?.medicine?[index].dosage ?? "N/A"}(${prescriptionDetailsController.prescriptionDetailsModel?.data?.medicine?[index].time ?? "N/A"})",
+                                                            style: TextStyleConst.mediumTextStyle(
+                                                              ColorConst.hintGreyColor,
+                                                              width * 0.04,
+                                                            ),
                                                           ),
                                                         ),
                                                         SizedBox(height: height * 0.01),

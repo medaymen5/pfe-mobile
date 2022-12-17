@@ -528,7 +528,7 @@ abstract class ApiClient {
     @Field("patient_id") String patientId,
     @Field("case_id") String caseId,
     @Field("assign_date") String assignDate,
-    @Field("discharge_date") String dischargeDate,
+    @Field("discharge_date") String? dischargeDate,
   );
 
   @POST("doctors/bed-assign-delete/{id}")

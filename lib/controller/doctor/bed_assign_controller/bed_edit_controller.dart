@@ -81,8 +81,8 @@ class EditBedController extends GetxController {
         ipdPatientController.text = "${editBedAssignModel!.data!.ipd_patient}";
         selectedBedAssignController.text = editBedAssignModel!.data!.assign_date!;
         selectedBedAssignDate = editBedAssignModel!.data!.assign_date!;
-        selectedDischargeController.text = editBedAssignModel!.data!.discharge_date!;
-        selectedDischargeDate = editBedAssignModel!.data!.discharge_date!;
+        selectedDischargeController.text = editBedAssignModel!.data!.discharge_date! == "N/A" ? "" : editBedAssignModel!.data!.discharge_date!;
+        selectedDischargeDate = editBedAssignModel!.data!.discharge_date! == "N/A" ? null : editBedAssignModel!.data!.discharge_date!;
         getBeds();
       })
       ..onError((DioError error, stackTrace) {
@@ -118,8 +118,6 @@ class EditBedController extends GetxController {
       DisplaySnackBar.displaySnackBar("Please select bed");
     } else if (selectedBedAssignDate == null) {
       DisplaySnackBar.displaySnackBar("Please select assign date");
-    } else if (selectedDischargeDate == null) {
-      DisplaySnackBar.displaySnackBar("Please select discharge date");
     } else {
       CommonLoader.showLoader();
       StringUtils.client.updateBedAssign(
@@ -129,7 +127,7 @@ class EditBedController extends GetxController {
         "${editBedAssignModel!.data!.ipd_patient}",
         "${editBedAssignModel!.data!.case_id}",
         "$selectedBedAssignDate",
-        "$selectedDischargeDate",
+        selectedDischargeDate,
       )
         ..then((value) {
           Get.back();

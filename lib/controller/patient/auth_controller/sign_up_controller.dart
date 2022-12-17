@@ -40,7 +40,7 @@ class SignUpController extends GetxController {
     } else if (confirmPasswordController.text.trim().isEmpty) {
       DisplaySnackBar.displaySnackBar("Please enter confirm password");
     } else if (passwordController.text.trim() != confirmPasswordController.text.trim()) {
-      DisplaySnackBar.displaySnackBar("Password and confirm password does not match");
+      DisplaySnackBar.displaySnackBar("Password and Confirm password does not match");
     } else {
       CommonLoader.showLoader();
       StringUtils.client.patientRegistration(

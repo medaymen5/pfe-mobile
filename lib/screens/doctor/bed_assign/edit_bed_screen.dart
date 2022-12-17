@@ -127,7 +127,7 @@ class EditBedScreen extends StatelessWidget {
                             SizedBox(height: height * 0.02),
 
                             /// Discharge date
-                            CommonRequiredText(width: width, text: StringUtils.disChargeDate),
+                            CommonText(width: width, text: StringUtils.disChargeDate),
                             SizedBox(height: height * 0.01),
                             CommonTextField(
                               readOnly: true,
