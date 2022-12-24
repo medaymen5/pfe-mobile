@@ -235,7 +235,7 @@ class InvoiceDetailScreen extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      "${invoiceDetailsController.invoiceDetailsModel?.data?.currencySymbol} ${invoiceDetailsController.invoiceDetailsModel?.data?.sub_total ?? "N/A"}",
+                                      "${invoiceDetailsController.invoiceDetailsModel?.data?.currencySymbol ?? "N/A"} ${invoiceDetailsController.invoiceDetailsModel?.data?.sub_total ?? "N/A"}",
                                       style: TextStyleConst.mediumTextStyle(
                                         ColorConst.blackColor,
                                         width * 0.045,

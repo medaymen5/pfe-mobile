@@ -103,7 +103,7 @@ class InvoiceScreen extends StatelessWidget {
                                             ),
                                             child: Center(
                                               child: Text(
-                                                "${invoiceListController.invoiceModel?.data?[index].currency ?? ""} ${invoiceListController.invoiceModel?.data?[index].amount ?? "N/A"}",
+                                                "${invoiceListController.invoiceModel?.data?[index].currency ?? "N/A"} ${invoiceListController.invoiceModel?.data?[index].amount ?? "N/A"}",
                                                 style: TextStyleConst.boldTextStyle(ColorConst.blackColor, width * 0.04),
                                               ),
                                             ),

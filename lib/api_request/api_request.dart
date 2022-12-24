@@ -81,7 +81,7 @@ import 'package:retrofit/retrofit.dart';
 
 part 'api_request.g.dart';
 
-@RestApi(baseUrl: "https://hms-staging.infyom.com/api/")
+@RestApi(baseUrl: "https://hms.infyom.com/api/")
 abstract class ApiClient {
   factory ApiClient(Dio dio, {String baseUrl}) = _ApiClient;
 

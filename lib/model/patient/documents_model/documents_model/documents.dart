@@ -19,7 +19,6 @@ class DocumentsModel {
   Map<String, dynamic> toJson() => _$DocumentsModelToJson(this);
 }
 
-
 @JsonSerializable()
 class DocumentData {
   int? id;
@@ -28,9 +27,8 @@ class DocumentData {
   int? patient_id;
   int? uploaded_by;
   String? notes;
-  String? is_default;
+  dynamic is_default;
   String? document_url;
-
 
   DocumentData({
     this.id,
@@ -45,5 +43,4 @@ class DocumentData {
   factory DocumentData.fromJson(Map<String, dynamic> json) => _$DocumentDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$DocumentDataToJson(this);
-
 }

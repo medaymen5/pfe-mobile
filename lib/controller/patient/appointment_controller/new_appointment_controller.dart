@@ -23,7 +23,7 @@ class NewAppointmentController extends GetxController {
   CreateAppointmentModel? createAppointmentModel;
   DateTime? oldValue;
 
-  String doctorId = "";
+  String? doctorId;
   String? departmentId;
   String? selectedDate;
   String? selectedTime;
@@ -53,7 +53,7 @@ class NewAppointmentController extends GetxController {
     StringUtils.client.getDoctor(PreferenceUtils.getStringValue("token"), id)
       ..then((value) {
         getDoctorModel = value;
-        doctorId = value.data![0].id.toString();
+        doctorId = (value.data?.isEmpty ?? true) ? null : value.data?[0].id.toString();
         isSelectDoctor = true;
         isSelectDoctorDepartment = true;
         update();
@@ -82,7 +82,7 @@ class NewAppointmentController extends GetxController {
     if (isSelectDoctor) {
       selectDate(context).then((value) async {
         if (selectedDate != null) {
-          await StringUtils.client.getBookingSlotDate(PreferenceUtils.getStringValue("token"), selectedDate!, doctorId).then((value) {
+          await StringUtils.client.getBookingSlotDate(PreferenceUtils.getStringValue("token"), selectedDate!, doctorId ?? "").then((value) {
             slotBookingModel = value;
             isSelectDate = true;
             if (slotBookingModel!.data!.bookingSlotArr!.isNotEmpty) {
@@ -112,7 +112,7 @@ class NewAppointmentController extends GetxController {
       StringUtils.client.createAppointment(
         PreferenceUtils.getStringValue("token"),
         departmentId!,
-        doctorId,
+        doctorId ?? "",
         selectedDate!,
         selectedTime!,
         VariableUtils.patientId.value,

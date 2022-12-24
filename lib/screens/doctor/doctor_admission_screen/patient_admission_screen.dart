@@ -163,12 +163,12 @@ class PatientAdmission extends StatelessWidget {
                                           shape: BoxShape.circle,
                                           image: DecorationImage(
                                             fit: BoxFit.cover,
-                                            image: NetworkImage(patientAdmissionController.patientAdmissionModel!.data![index].patient_image!),
+                                            image: NetworkImage(patientAdmissionController.patientAdmissionModel?.data?[index].patient_image ?? ""),
                                           ),
                                         ),
                                       ),
                                       title: Text(
-                                        patientAdmissionController.patientAdmissionModel!.data![index].patient_name!,
+                                        patientAdmissionController.patientAdmissionModel?.data?[index].patient_name ?? "N/A",
                                         style: TextStyleConst.mediumTextStyle(
                                           ColorConst.blackColor,
                                           width * 0.045,
@@ -177,7 +177,7 @@ class PatientAdmission extends StatelessWidget {
                                       subtitle: Row(
                                         children: [
                                           Text(
-                                            patientAdmissionController.patientAdmissionModel!.data![index].admission_id!,
+                                            patientAdmissionController.patientAdmissionModel?.data?[index].admission_id ?? "N/A",
                                             style: TextStyleConst.mediumTextStyle(
                                               ColorConst.hintGreyColor,
                                               width * 0.036,
@@ -192,7 +192,7 @@ class PatientAdmission extends StatelessWidget {
                                           ),
                                           Flexible(
                                             child: Text(
-                                              "${patientAdmissionController.patientAdmissionModel!.data![index].admission_time!} ${patientAdmissionController.patientAdmissionModel!.data![index].admission_date!}",
+                                              "${patientAdmissionController.patientAdmissionModel?.data?[index].admission_time ?? "N/A"} ${patientAdmissionController.patientAdmissionModel?.data?[index].admission_date ?? "N/A"}",
                                               style: TextStyleConst.mediumTextStyle(
                                                 ColorConst.hintGreyColor,
                                                 width * 0.036,

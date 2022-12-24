@@ -29,7 +29,7 @@ class DoctorDocumentsDataModel {
   int? patient_id;
   int? uploaded_by;
   String? notes;
-  String? is_default;
+  dynamic is_default;
   String? document_url;
 
   DoctorDocumentsDataModel({

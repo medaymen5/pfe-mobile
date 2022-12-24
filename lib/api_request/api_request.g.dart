@@ -13,7 +13,7 @@ class _ApiClient implements ApiClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://hms-staging.infyom.com/api/';
+    baseUrl ??= 'https://hms.infyom.com/api/';
   }
 
   final Dio _dio;
@@ -2035,6 +2035,7 @@ class _ApiClient implements ApiClient {
       'assign_date': assignDate,
       'discharge_date': dischargeDate,
     };
+    _data.removeWhere((k, v) => v == null);
     final _result = await _dio.fetch<Map<String, dynamic>>(_setStreamType<BedUpdatedDetailsModel>(Options(
       method: 'POST',
       headers: _headers,
