@@ -39,7 +39,7 @@ class CommonTextField extends StatelessWidget {
       obscureText: obscureText ?? false,
       readOnly: readOnly,
       keyboardType: keyBoardType,
-      maxLines: maxLine,
+      maxLines: maxLine ?? 1,
       minLines: minLine,
       onTap: onTap,
       controller: controller,
