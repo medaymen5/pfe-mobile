@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "534384749521",
-    "project_id": "infyhms-d94dc",
-    "storage_bucket": "infyhms-d94dc.appspot.com"
+    "project_number": "217558114469",
+    "project_id": "clinicappflutter",
+    "storage_bucket": "clinicappflutter.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:534384749521:android:5c6f6ca09e3180bcc94ef0",
+        "mobilesdk_app_id": "1:217558114469:android:35ab72e07a834ca2c82d4c",
         "android_client_info": {
-          "package_name": "com.example.infyhms_flutter"
+          "package_name": "com.example.clinicapp_flutter"
         }
       },
       "oauth_client": [
         {
-          "client_id": "534384749521-mvg9nmo26o76h5n3jmmliu0mohadf2lj.apps.googleusercontent.com",
+          "client_id": "217558114469-f2hrrkc2s5ru4u4bl4sbb6at35cpmegb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.clinicapp_flutter",
+            "certificate_hash": "bcac4086eac7b7fd8f0f3c40e7d66e350d141aff"
+          }
+        },
+        {
+          "client_id": "217558114469-ons91tfp5ol9avf3rlv4kc6iu8fbccod.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCNnf2VdeSbjbzWgiBuJTTzxq_ppHgL1B8"
+          "current_key": "AIzaSyCgQrAecjKoW8G1jnWylxHnJ4SxYdRW0kU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "534384749521-mvg9nmo26o76h5n3jmmliu0mohadf2lj.apps.googleusercontent.com",
+              "client_id": "217558114469-ons91tfp5ol9avf3rlv4kc6iu8fbccod.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
