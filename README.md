@@ -1,4 +1,4 @@
-# infyhms_flutter
+# clinicapp_flutter
 
 A new Flutter project.
 
